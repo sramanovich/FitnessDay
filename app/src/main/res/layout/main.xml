@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/mainBackground">
+    >
+
+    <include android:id="@+id/toolbar"
+        layout="@layout/toolbar"/>
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Continue last program"
+        android:id="@+id/btnContinueLastProgram"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="5dp"/>
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Select program"
+        android:id="@+id/btnSelectProgram"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="5dp"/>
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="CreateProgram"
+        android:id="@+id/btnCreateProgram"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="5dp"/>
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Categories"
+        android:id="@+id/btnCategories"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="5dp"/>
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Exercises"
+        android:id="@+id/btnExercises"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="5dp"/>
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Transformation"
+        android:id="@+id/btnTransformation"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="5dp"/>
+
+</LinearLayout>
+
