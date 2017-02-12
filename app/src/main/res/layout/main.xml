@@ -16,23 +16,26 @@
         android:text="Continue last program"
         android:id="@+id/btnContinueLastProgram"
         android:layout_gravity="center_horizontal"
-        android:layout_margin="5dp"/>
+        android:background="@drawable/button_background"
+        android:layout_margin="10dp"/>
 
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Select program"
+        android:text="Select Program"
         android:id="@+id/btnSelectProgram"
         android:layout_gravity="center_horizontal"
-        android:layout_margin="5dp"/>
+        android:background="@drawable/round_button_normal"
+        android:layout_margin="10dp"/>
 
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="CreateProgram"
+        android:text="Create Program"
         android:id="@+id/btnCreateProgram"
         android:layout_gravity="center_horizontal"
-        android:layout_margin="5dp"/>
+        android:background="@drawable/round_button_normal"
+        android:layout_margin="10dp"/>
 
     <Button
         android:layout_width="fill_parent"
@@ -40,7 +43,8 @@
         android:text="Categories"
         android:id="@+id/btnCategories"
         android:layout_gravity="center_horizontal"
-        android:layout_margin="5dp"/>
+        android:background="@drawable/round_button_normal"
+        android:layout_margin="10dp"/>
 
     <Button
         android:layout_width="fill_parent"
@@ -48,7 +52,8 @@
         android:text="Exercises"
         android:id="@+id/btnExercises"
         android:layout_gravity="center_horizontal"
-        android:layout_margin="5dp"/>
+        android:background="@drawable/round_button_normal"
+        android:layout_margin="10dp"/>
 
     <Button
         android:layout_width="fill_parent"
@@ -56,7 +61,8 @@
         android:text="Transformation"
         android:id="@+id/btnTransformation"
         android:layout_gravity="center_horizontal"
-        android:layout_margin="5dp"/>
+        android:background="@drawable/round_button_normal"
+        android:layout_margin="10dp"/>
 
 </LinearLayout>
 

@@ -9,6 +9,9 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 //import android.view.View;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
 //import android.widget.Toast;
@@ -16,6 +19,8 @@ import android.widget.ListView;
 public class ExercisesActivity extends AppCompatActivity {
 
     private CursorAdapter cursorAdapter;
+
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,11 +37,7 @@ public class ExercisesActivity extends AppCompatActivity {
             lvData.setAdapter(cursorAdapter);
         }
 
-        /*ActionBar actionBar = getSupportActionBar();
-        if( actionBar != null ) {
-            actionBar.setHomeButtonEnabled(true);
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }*/
+        initToolbar();
 
         /*FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -45,5 +46,34 @@ public class ExercisesActivity extends AppCompatActivity {
                 Toast.makeText(ExercisesActivity.this, "Would you like a coffee?", Toast.LENGTH_SHORT).show();
             }
         });*/
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.exercises_list_menu, menu);
+        return true;
+    }
+
+    private void initToolbar() {
+        toolbar = (Toolbar)findViewById(R.id.toolbar);
+        toolbar.setTitle(R.string.app_name);
+        toolbar.setSubtitle(R.string.exercies);
+        //toolbar.setLogo(R.drawable.ic_launcher);
+        setSupportActionBar(toolbar);
+
+        // add back arrow to toolbar
+        if (getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                System.out.println(item.toString());
+                return false;
+            }
+        });
+
+        //toolbar.inflateMenu(R.menu.exercises_list_menu);
     }
 }

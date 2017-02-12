@@ -7,4 +7,6 @@
     <color name="colorListBackgroundTop">#e2e2e2</color>
     <color name="colorListBackground">#4e4a4a</color>
     <color name="colorListText">#000000</color>
+    <color name="colorButtonNormal">#008a9a</color>
+    <color name="colorButtonPressed">#4dabb6</color>
 </resources>
