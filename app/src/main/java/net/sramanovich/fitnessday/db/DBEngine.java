@@ -1,4 +1,4 @@
-package net.sramanovich.fitnessday;
+package net.sramanovich.fitnessday.db;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -25,7 +25,18 @@ public class DBEngine {
         return mDBHelper.getReadableDatabase();
     }
 
-     public static Cursor getExercisesCursor() {
+    public static Cursor getExercisesCursor() {
          return getReadableDatabase().query(ExercisesTable.DB_TABLE_NAME, null, null, null, null, null, null);
+    }
+
+    public static Cursor getTrainingProgramCursor(int isTemplate) {
+        String additionalQuery;
+        if(isTemplate<0||isTemplate>1) {
+            additionalQuery = "";
+        }
+        else {
+            additionalQuery= TrainingProgramTable.COL_IS_TEMPLATE + "=" + isTemplate;
+        }
+        return getReadableDatabase().query(TrainingProgramTable.DB_TABLE_NAME, null, additionalQuery, null, null, null, null);
     }
 }

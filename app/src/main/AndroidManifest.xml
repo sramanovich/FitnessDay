@@ -23,7 +23,31 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-
+        <activity
+            android:name=".ExerciseEditorActivity"
+            android:parentActivityName=".ExercisesActivity"
+            android:label="@string/app_name">
+        </activity>
+        <activity
+            android:name=".NewProgramExercisesActivity"
+            android:parentActivityName=".MainActivity"
+            android:label="@string/app_name">
+        </activity>
+        <activity
+            android:name=".ProgramsContentListActivity"
+            android:parentActivityName=".MainActivity"
+            android:label="@string/program">
+        </activity>
+        <activity
+            android:name=".TrainingProgramActivity"
+            android:parentActivityName=".ProgramsContentListActivity"
+            android:label="@string/program">
+        </activity>
+        <activity
+            android:name=".ExerciseSetActivity"
+            android:parentActivityName=".TrainingProgramActivity"
+            android:label="@string/program">
+        </activity>
     </application>
 
 </manifest>

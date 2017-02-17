@@ -1,15 +1,16 @@
 package net.sramanovich.fitnessday;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+
+import net.sramanovich.fitnessday.db.DBEngine;
+import net.sramanovich.fitnessday.utils.AskNameDialog;
+import net.sramanovich.fitnessday.utils.ModalDialogThread;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -26,6 +27,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Button btnExercises = (Button)findViewById(R.id.btnExercises);
         btnExercises.setOnClickListener(this);
+        Button btnCreateProgram = (Button)findViewById(R.id.btnCreateProgram);
+        btnCreateProgram.setOnClickListener(this);
+        Button btnSelectProgram = (Button)findViewById(R.id.btnSelectProgram);
+        btnSelectProgram.setOnClickListener(this);
+        Button btnMyPrograms = (Button)findViewById(R.id.btnMyPrograms);
+        btnMyPrograms.setOnClickListener(this);
     }
 
     @Override
@@ -34,6 +41,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btnExercises: {
                 Intent intentExercise = new Intent(this, ExercisesActivity.class);
                 startActivity(intentExercise);
+                break;
+            }
+
+            case R.id.btnCreateProgram: {
+                Intent intentNewProgramExercises = new Intent(this, NewProgramExercisesActivity.class);
+                startActivity(intentNewProgramExercises);
+                break;
+            }
+
+            case R.id.btnSelectProgram: {
+                Intent intentContent = new Intent(this, ProgramsContentListActivity.class);
+                intentContent.putExtra(Constants.INTENT_PARAM_IS_TEMPLATE, 1);
+                startActivity(intentContent);
+                break;
+            }
+
+            case R.id.btnMyPrograms: {
+                Intent intentContent = new Intent(this, ProgramsContentListActivity.class);
+                intentContent.putExtra(Constants.INTENT_PARAM_IS_TEMPLATE, 0);
+                startActivity(intentContent);
                 break;
             }
         }

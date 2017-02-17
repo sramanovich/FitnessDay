@@ -26,11 +26,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|right"
             android:layout_margin="10dp"
-            android:src="@drawable/magnify"
+            android:src="@drawable/check"
             app:rippleColor="@color/colorPrimary"
             app:backgroundTint="@color/colorPrimary"
             app:fabSize="normal"/>
-
     </android.support.design.widget.CoordinatorLayout>
 
 </LinearLayout>

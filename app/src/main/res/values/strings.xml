@@ -6,6 +6,11 @@
     <string name="menu_delete">Delete</string>
     <string name="app_name">FitnessDay</string>
     <string name="exercies">Exercises</string>
+    <string name="training_programs">Training programs</string>
+    <string name="create_program">Create new program</string>
+    <string name="program">Program</string>
+    <string name="program_name">Program name</string>
+    <string name="program_save_error">Cannot save program: Name is not defined</string>
     <string name="exercise_1">Отжимания от пола</string>
     <string name="exercise_2">Отжимания на брусъях</string>
     <string name="exercise_3">Подтягивания</string>

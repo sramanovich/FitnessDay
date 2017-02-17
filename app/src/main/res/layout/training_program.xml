@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include android:id="@+id/toolbar"
+        layout="@layout/toolbar"/>
+
+    <net.sramanovich.fitnessday.utils.DragListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/trainingListView"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:clickable="false"
+        android:longClickable="true"
+        android:focusable="false"
+        android:focusableInTouchMode="false"/>
+</LinearLayout>

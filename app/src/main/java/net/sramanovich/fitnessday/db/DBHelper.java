@@ -1,17 +1,17 @@
-package net.sramanovich.fitnessday;
+package net.sramanovich.fitnessday.db;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import net.sramanovich.fitnessday.Constants;
+
 class DBHelper extends SQLiteOpenHelper {
-    private static final int DB_VERSION = 1;
-    private static final String DB_NAME = "Fitness";
     private static DBHelper mDBHelper;
     private static Context mContext;
 
     private DBHelper(Context context) {
-        super(context, DB_NAME, null, DB_VERSION);
+        super(context, Constants.DB_NAME, null, Constants.DB_VERSION);
         mContext = context;
     }
 
@@ -26,6 +26,7 @@ class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(ExercisesTable.CREATE_TABLE_SQL);
+        db.execSQL(TrainingProgramTable.CREATE_TABLE_SQL);
         ExercisesTable.initData(db, mContext);
     }
 

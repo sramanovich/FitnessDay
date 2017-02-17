@@ -1,28 +1,38 @@
 package net.sramanovich.fitnessday;
 
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.design.widget.FloatingActionButton;
 import android.database.Cursor;
 import android.os.Bundle;
-//import android.support.design.widget.FloatingActionButton;
-//import android.support.v7.app.ActionBarActivity;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-//import android.view.View;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.CursorAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import net.sramanovich.fitnessday.db.DBEngine;
 import net.sramanovich.fitnessday.db.ExercisesTable;
-//import android.widget.Toast;
+import net.sramanovich.fitnessday.db.TrainingProgramTable;
 
-public class ExercisesActivity extends AppCompatActivity {
+/**
+ * Activity - exercises list with check boxes
+ * to create new program
+ * ask program name dialog
+ */
 
+public class NewProgramExercisesActivity extends AppCompatActivity {
     private CursorAdapter cursorAdapter;
     private Cursor cursor;
     private Toolbar toolbar;
+    private long db_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,9 +42,9 @@ public class ExercisesActivity extends AppCompatActivity {
         ListView lvData = (ListView)findViewById(R.id.listExercises);
 
         Cursor cursor = DBEngine.getExercisesCursor();
-        String[] from = new String[]{ExercisesTable.COL_NAME, ExercisesTable.COL_TYPE};
-        int[] to = new int[]{R.id.textViewExerciseListItemName, R.id.imgViewExerciseListItemIcon};
-        cursorAdapter = ExercisesTable.getExercisesCursorAdapter( this, R.layout.exercises_list_item, cursor, from, to, 0);
+        String[] from = new String[]{ExercisesTable.COL_USED, ExercisesTable.COL_NAME, ExercisesTable.COL_TYPE};
+        int[] to = new int[]{R.id.checkBoxIsUsed, R.id.textViewProgramExerciseName, R.id.imageViewProgramExerciseType};
+        cursorAdapter = ExercisesTable.getNewProgramExercisesCursorAdapter( DBEngine.getWritableDatabase(), this, R.layout.new_program_exercises_list_item, cursor, from, to, 0);
         if( cursorAdapter!= null ) {
             lvData.setAdapter(cursorAdapter);
         }
@@ -42,9 +52,14 @@ public class ExercisesActivity extends AppCompatActivity {
         initToolbar();
 
         FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.fab);
-        if( fab != null ) {
-            fab.hide();
-        }
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onSaveProgram();
+            }
+        });
+
+        //AskNameDialog.init(this);
     }
 
     @Override
@@ -53,11 +68,46 @@ public class ExercisesActivity extends AppCompatActivity {
         return true;
     }
 
+    private void onSaveProgram() {
+        final TrainingProgramTable trainingProgramTable = TrainingProgramTable.getTrainingProgramTable();
+        db_id = trainingProgramTable.createNew("");
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.program_name);
+        final EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(input);
+        builder.setCancelable(false);
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String name = input.getText().toString();
+                if(!name.isEmpty()) {
+                    trainingProgramTable.setName(name);
+                    trainingProgramTable.writeData(db_id, 1);
+                }
+                else {
+                    Toast toast = Toast.makeText(getApplicationContext(), R.string.program_save_error, Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
+                }
+                ExercisesTable.resetUsedFlag();
+                closeActivity();
+            }
+        });
+
+        builder.show();
+        //ModalDialogThread t = new ModalDialogThread("Program:");
+        //t.execute();
+    }
+
+    private void closeActivity() {
+        this.finish();
+    }
+
     private void initToolbar() {
         toolbar = (Toolbar)findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.app_name);
-        toolbar.setSubtitle(R.string.exercies);
-        //toolbar.setLogo(R.drawable.ic_launcher);
+        toolbar.setSubtitle(R.string.create_program);
         setSupportActionBar(toolbar);
 
         // add back arrow to toolbar

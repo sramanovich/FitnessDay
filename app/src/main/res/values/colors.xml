@@ -3,10 +3,14 @@
     <color name="colorPrimary">#00acc1</color>
     <color name="colorPrimaryDark">#008a9a</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="mainBackground">#e2e2e2</color>
+    <color name="colorMainBackground">#e2e2e2</color>
     <color name="colorListBackgroundTop">#e2e2e2</color>
     <color name="colorListBackground">#4e4a4a</color>
     <color name="colorListText">#000000</color>
+    <color name="colorTextView">#000000</color>
+    <color name="colorTextEditor">#000000</color>
     <color name="colorButtonNormal">#008a9a</color>
     <color name="colorButtonPressed">#4dabb6</color>
+    <color name="colorButtonText">#000000</color>
+    <color name="colorLayoutSeparator">#aeabab</color>
 </resources>
