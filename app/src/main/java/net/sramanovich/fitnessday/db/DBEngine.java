@@ -31,12 +31,12 @@ public class DBEngine {
 
     public static Cursor getTrainingProgramCursor(int isTemplate) {
         String additionalQuery;
-        if(isTemplate<0||isTemplate>1) {
+        if( isTemplate >= 0 ) {
+            additionalQuery = TrainingProgramTable.COL_IS_TEMPLATE + "=" + isTemplate;
+        } else {
             additionalQuery = "";
         }
-        else {
-            additionalQuery= TrainingProgramTable.COL_IS_TEMPLATE + "=" + isTemplate;
-        }
+
         return getReadableDatabase().query(TrainingProgramTable.DB_TABLE_NAME, null, additionalQuery, null, null, null, null);
     }
 }

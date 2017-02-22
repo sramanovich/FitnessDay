@@ -2,13 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/colorListBackgroundTop">
 
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/checkBoxIsUsed"
-        android:checked="false"/>
+        android:buttonTint="@color/colorListText"/>
 
     <TextView
         android:layout_width="210dp"
@@ -16,7 +17,8 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Exercise"
         android:id="@+id/textViewProgramExerciseName"
-        android:layout_weight="0.73"/>
+        android:layout_weight="0.73"
+        android:textColor="@color/colorListText"/>
 
     <ImageView
         android:layout_width="wrap_content"

@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
+import net.sramanovich.fitnessday.Constants;
 import net.sramanovich.fitnessday.R;
 import net.sramanovich.fitnessday.utils.PairSet;
 import net.sramanovich.fitnessday.adapters.TrainingProgramListAdapter;
@@ -65,19 +66,19 @@ public class TrainingProgramTable {
         return trainingProgramTable;
     }
 
-    public long copyFrom(int srcPosition) {
+    public long copyFrom(Cursor cursor, int srcPosition) {
         try {
             //training.init(name);
-            training.parseData(srcPosition);
+            training.parseData(cursor, srcPosition);
             ContentValues cvSetValues = new ContentValues();
             cvSetValues.put(COL_NAME, training.name);
-            cvSetValues.put(COL_IS_TEMPLATE, 1);
+            cvSetValues.put(COL_IS_TEMPLATE, Constants.TT_PROGRAM_TEMPLATE);
             cvSetValues.put(COL_EXERCISES, training.collectExercises());
             Date today = Calendar.getInstance().getTime();
             cvSetValues.put(COL_DATE, today.getTime()/1000);
 
             long db_id = DBEngine.getWritableDatabase().insert(DB_TABLE_NAME, null, cvSetValues);
-            writeData((int)db_id, 1);
+            writeData((int)db_id, Constants.TT_USER_PROGRAM_TEMPLATE);
             return db_id;
         } catch (SQLiteException e) {
             Log.v("Database:", e.getMessage());
@@ -94,12 +95,12 @@ public class TrainingProgramTable {
 
             ContentValues cvSetValues = new ContentValues();
             cvSetValues.put(COL_NAME, training.name);
-            cvSetValues.put(COL_IS_TEMPLATE, 1);
+            cvSetValues.put(COL_IS_TEMPLATE, Constants.TT_PROGRAM_TEMPLATE);
             Date today = Calendar.getInstance().getTime();
             cvSetValues.put(COL_DATE, today.getTime()/1000);
 
             long db_id = DBEngine.getWritableDatabase().insert(DB_TABLE_NAME, null, cvSetValues);
-            writeData((int)db_id, 1);
+            writeData((int)db_id, Constants.TT_PROGRAM_TEMPLATE);
             return db_id;
         } catch (SQLiteException e) {
             Log.v("Database:", e.getMessage());
@@ -108,9 +109,9 @@ public class TrainingProgramTable {
         return 0;
     }
 
-    public void openProgram(int position) {
+    public void openProgram(Cursor cursor, int position) {
 
-        training.parseData(position);
+        training.parseData(cursor, position);
     }
 
     public String getTrainingExercises() {
@@ -128,6 +129,10 @@ public class TrainingProgramTable {
 
     public void setName(String name) {
         training.name = name;
+    }
+
+    public String getName() {
+        return training.name;
     }
 
     public void writeData(long db_id, int isTemplate) {
@@ -213,8 +218,8 @@ public class TrainingProgramTable {
             }
         }
 
-        public boolean parseData(int position) {
-            Cursor cursorPrograms = DBEngine.getTrainingProgramCursor(-1);
+        public boolean parseData(Cursor cursorPrograms, int position) {
+            //Cursor cursorPrograms = DBEngine.getTrainingProgramCursor(-1);
             if(!cursorPrograms.moveToPosition(position)) {
                 return false;
             }

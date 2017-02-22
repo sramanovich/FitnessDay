@@ -33,7 +33,7 @@ public class ProgramsContentListActivity extends AppCompatActivity {
 
     CursorAdapter cursorAdapter;
 
-    int isTemplate=1;
+    private int isTemplate;
 
     private Toolbar toolbar;
 
@@ -49,7 +49,7 @@ public class ProgramsContentListActivity extends AppCompatActivity {
             mTable = TrainingProgramTable.getTrainingProgramTable();
 
             Intent intent = getIntent();
-            isTemplate = intent.getIntExtra(Constants.INTENT_PARAM_IS_TEMPLATE, 1);
+            isTemplate = intent.getIntExtra(Constants.INTENT_PARAM_IS_TEMPLATE, Constants.TT_PROGRAM_TEMPLATE);
 
             cursor = DBEngine.getTrainingProgramCursor(isTemplate);
             String[] from = new String[]{TrainingProgramTable.COL_NAME, TrainingProgramTable.COL_DATE};
@@ -62,8 +62,8 @@ public class ProgramsContentListActivity extends AppCompatActivity {
             lvPrograms.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    if(isTemplate==1) {
-                        onStartProgram(id);
+                    if(isTemplate==Constants.TT_USER_PROGRAM_TEMPLATE) {
+                        onViewProgram(id);
                     }
                     else {
                         onOpenProgram(id);
@@ -89,10 +89,14 @@ public class ProgramsContentListActivity extends AppCompatActivity {
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         menu.clear();
         int count=0;
-        if(isTemplate==1) {
+        if(isTemplate==Constants.TT_PROGRAM_TEMPLATE) {
             menu.add(0, MENU_ITEM_START_PROGRAM, count++, "Start");
         }
-        else {
+        else if(isTemplate==Constants.TT_USER_PROGRAM_TEMPLATE) {
+            menu.add(0, MENU_ITEM_START_PROGRAM, count++, "Start");
+            menu.add(0, MENU_ITEM_VIEW_PROGRAM, count++, "View");
+        }
+        else if(isTemplate==Constants.TT_USER_PROGRAM) {
             menu.add(0, MENU_ITEM_OPEN_PROGRAM, count++, "Continue");
             menu.add(0, MENU_ITEM_VIEW_PROGRAM, count++, "View");
         }
@@ -162,16 +166,15 @@ public class ProgramsContentListActivity extends AppCompatActivity {
 
     private void onStartProgram(long id) {
         Intent intentNewProgram = new Intent(this, TrainingProgramActivity.class);
-        intentNewProgram.putExtra(Constants.INTENT_PARAM_ID, 0);
         intentNewProgram.putExtra(Constants.INTENT_PARAM_ID, (int)id);
-        intentNewProgram.putExtra(Constants.INTENT_PARAM_IS_TEMPLATE, 1);
+        intentNewProgram.putExtra(Constants.INTENT_PARAM_IS_TEMPLATE, isTemplate);
         startActivity(intentNewProgram);
     }
 
     private void onOpenProgram(long id) {
         Intent intentProgram = new Intent(this, TrainingProgramActivity.class);
         intentProgram.putExtra(Constants.INTENT_PARAM_ID, (int)id);
-        intentProgram.putExtra(Constants.INTENT_PARAM_IS_TEMPLATE, 0);
+        intentProgram.putExtra(Constants.INTENT_PARAM_IS_TEMPLATE, isTemplate);
         startActivity(intentProgram);
     }
 
@@ -179,6 +182,7 @@ public class ProgramsContentListActivity extends AppCompatActivity {
         Intent intentProgram = new Intent(this, TrainingProgramActivity.class);
         intentProgram.putExtra(Constants.INTENT_PARAM_ID, (int)id);
         intentProgram.putExtra(Constants.INTENT_PARAM_VIEW_MODE, 1);
+        intentProgram.putExtra(Constants.INTENT_PARAM_IS_TEMPLATE, isTemplate);
         startActivity(intentProgram);
     }
 }

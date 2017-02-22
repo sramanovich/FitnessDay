@@ -18,7 +18,7 @@ public class DragListView extends ListView {
     private ImageView dragImageView;
     private int dragSrcPosition;
     private int dragPosition;
-    private int dragEmptyPosition=-1;
+    private int dragEmptyPosition=INVALID_POSITION;
     private TrainingSet dragSrcItem;
 
     private int mDownX=-1;
@@ -44,10 +44,12 @@ public class DragListView extends ListView {
         @Override
         public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
             dragSrcPosition = dragPosition = position;//pointToPosition(mDownX, mDownY);
+            Log.v("onItemLongClick: ", "dragSrcPosition="+position);
             if(dragPosition!=AdapterView.INVALID_POSITION){
                 if(dragSrcPosition>=0&&dragSrcPosition<getAdapter().getCount()){
                     TrainingProgramListAdapter adapter = (TrainingProgramListAdapter) getAdapter();
                     dragSrcItem = adapter.getItem(dragSrcPosition);
+                    Log.v("onItemLongClick: ", "dragSrcItem="+dragSrcItem);
                     //adapter.remove(dragSrcItem);
                 }
             }
@@ -158,24 +160,29 @@ public class DragListView extends ListView {
             windowParams.y = y - dragPoint + dragOffset;
             windowManager.updateViewLayout(dragImageView, windowParams);
         }
-        int tempPosition = pointToPosition(0, y);
+        int tempPosition = pointToPosition(50, y);
+        Log.v("onDrag: ", "tempPosition="+tempPosition);
         if(tempPosition!=INVALID_POSITION){
             dragPosition = tempPosition;
             if(dragEmptyPosition>= 0 && dragPosition!=dragEmptyPosition) {
                 TrainingProgramListAdapter adapter = (TrainingProgramListAdapter) getAdapter();
                 TrainingSet itemToDelete = adapter.getItem(dragEmptyPosition);
                 adapter.remove(itemToDelete);
-                dragEmptyPosition = -1;
+                Log.v("onDrag: ", "Remove item itemToDelete=="+itemToDelete);
+                dragEmptyPosition = INVALID_POSITION;
             }
 
-            if( dragEmptyPosition<0&&dragPosition!=dragSrcPosition&&
-                    dragSrcPosition>=0&&dragSrcPosition<getAdapter().getCount()) {
+            if( dragEmptyPosition==INVALID_POSITION &&
+                    //dragPosition!=dragSrcPosition &&
+                    dragSrcPosition>=0 &&
+                    dragSrcPosition<getAdapter().getCount()) {
                 TrainingProgramListAdapter adapter = (TrainingProgramListAdapter) getAdapter();
                 adapter.remove(dragSrcItem);
                 adapter.insert(new TrainingSet(0, ""), dragPosition);
+                Log.v("onDrag: ", "emptyPosition="+dragPosition);
                 dragEmptyPosition = dragPosition;
             }
-            Log.v("onDrag: ", "dragPosition="+dragPosition);
+            //Log.v("onDrag: ", "dragPosition="+dragPosition);
         }
 
         int scrollHeight = 0;

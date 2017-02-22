@@ -2,45 +2,61 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:weightSum="1">
+              android:layout_height="match_parent">
 
-    <LinearLayout
-        android:orientation="horizontal"
+    <FrameLayout
+        android:id="@+id/frameLayout1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:weightSum="1">
-
-        <TextView
-            android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="001"
-            android:id="@+id/textViewSeqNumber"
-            android:layout_weight="0.21"
-            android:clickable="false"
-            android:focusable="false"
-            android:focusableInTouchMode="false"/>
+            android:background="@color/colorListBackgroundTop">
 
-        <TextView
-            android:layout_width="248dp"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Name"
-            android:id="@+id/textViewName"
-            android:layout_weight="0.66"
-            android:focusable="false"
-            android:clickable="false"
-            android:focusableInTouchMode="false"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="001"
+                android:id="@+id/textViewSeqNumber"
+                android:layout_weight="6"
+                android:textColor="@color/colorListText"
+                android:layout_marginLeft="5dp"
+                android:clickable="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:gravity="center_vertical"/>
 
-        <Button
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Start"
-            android:id="@+id/buttonStart"
-            android:focusable="false"
-            android:focusableInTouchMode="false"/>
-    </LinearLayout>
+            <TextView
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Name"
+                android:id="@+id/textViewName"
+                android:layout_weight="2"
+                android:textColor="@color/colorListText"
+                android:layout_marginLeft="5dp"
+                android:clickable="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:lines="2"
+                android:gravity="center_vertical"/>
 
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Start"
+                android:id="@+id/buttonStart"
+                android:background="@drawable/button_background"
+                android:layout_weight="5"
+                android:focusable="false"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="5dp"
+                android:focusableInTouchMode="false"
+                android:gravity="center_vertical"
+                android:textAlignment="center" />
+        </LinearLayout>
+    </FrameLayout>
 </LinearLayout>

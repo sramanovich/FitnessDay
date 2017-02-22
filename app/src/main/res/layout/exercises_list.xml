@@ -4,6 +4,7 @@
               android:orientation="vertical"
               android:layout_width="fill_parent"
               android:layout_height="match_parent"
+              android:background="@color/colorListBackground"
               android:weightSum="1">
 
     <include android:id="@+id/toolbar"
@@ -27,8 +28,8 @@
             android:layout_gravity="bottom|right"
             android:layout_margin="10dp"
             android:src="@drawable/check"
-            app:rippleColor="@color/colorPrimary"
-            app:backgroundTint="@color/colorPrimary"
+            app:rippleColor="@color/colorButtonNormal"
+            app:backgroundTint="@color/colorButtonNormal"
             app:fabSize="normal"/>
     </android.support.design.widget.CoordinatorLayout>
 

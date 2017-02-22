@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 
 import net.sramanovich.fitnessday.db.DBEngine;
+import net.sramanovich.fitnessday.db.TrainingProgramTable;
 import net.sramanovich.fitnessday.utils.AskNameDialog;
 import net.sramanovich.fitnessday.utils.ModalDialogThread;
 
@@ -33,6 +34,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnSelectProgram.setOnClickListener(this);
         Button btnMyPrograms = (Button)findViewById(R.id.btnMyPrograms);
         btnMyPrograms.setOnClickListener(this);
+        Button btnContinueLastProgram = (Button)findViewById(R.id.btnContinueLastProgram);
+        btnContinueLastProgram.setOnClickListener(this);
     }
 
     @Override
@@ -52,14 +55,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.btnSelectProgram: {
                 Intent intentContent = new Intent(this, ProgramsContentListActivity.class);
-                intentContent.putExtra(Constants.INTENT_PARAM_IS_TEMPLATE, 1);
+                intentContent.putExtra(Constants.INTENT_PARAM_IS_TEMPLATE, Constants.TT_PROGRAM_TEMPLATE);
                 startActivity(intentContent);
                 break;
             }
 
             case R.id.btnMyPrograms: {
                 Intent intentContent = new Intent(this, ProgramsContentListActivity.class);
-                intentContent.putExtra(Constants.INTENT_PARAM_IS_TEMPLATE, 0);
+                intentContent.putExtra(Constants.INTENT_PARAM_IS_TEMPLATE, Constants.TT_USER_PROGRAM_TEMPLATE);
+                startActivity(intentContent);
+                break;
+            }
+
+            case R.id.btnContinueLastProgram: {
+                Intent intentContent = new Intent(this, ProgramsContentListActivity.class);
+                intentContent.putExtra(Constants.INTENT_PARAM_IS_TEMPLATE, Constants.TT_USER_PROGRAM);
                 startActivity(intentContent);
                 break;
             }

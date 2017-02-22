@@ -22,6 +22,12 @@ import net.sramanovich.fitnessday.db.TrainingProgramTable;
 import net.sramanovich.fitnessday.db.TrainingSet;
 import net.sramanovich.fitnessday.utils.DragListView;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
+
 public class TrainingProgramActivity extends AppCompatActivity{
 
     private Cursor cursor;
@@ -31,6 +37,8 @@ public class TrainingProgramActivity extends AppCompatActivity{
     private TrainingProgramTable trainingProgram;
 
     private long db_id=0;
+
+    private int isTemplate=0;
 
     private Toolbar toolbar;
 
@@ -43,20 +51,22 @@ public class TrainingProgramActivity extends AppCompatActivity{
         initToolbar();
 
         try {
-            cursor = DBEngine.getTrainingProgramCursor(-1);
-
-            trainingProgram = TrainingProgramTable.getTrainingProgramTable();
-
             Intent intent = getIntent();
             db_id = intent.getIntExtra(Constants.INTENT_PARAM_ID, 0);
-            int isTemplate = intent.getIntExtra(Constants.INTENT_PARAM_IS_TEMPLATE, 0);
+            isTemplate = intent.getIntExtra(Constants.INTENT_PARAM_IS_TEMPLATE, 0);
             int isViewMode = intent.getIntExtra(Constants.INTENT_PARAM_VIEW_MODE, 0);
 
-            if(isTemplate==1) {
-                if(moveSetCursorPositionByID(cursor, db_id)) {
+            cursor = DBEngine.getTrainingProgramCursor(isTemplate);
+            trainingProgram = TrainingProgramTable.getTrainingProgramTable();
+
+            Log.v("Training program:", "onCreate(), IsTemplate="+isTemplate);
+            if(isTemplate == Constants.TT_PROGRAM_TEMPLATE) {
+                int currPosition = getCursorPositionByID(db_id);
+                if(currPosition >= 0) {
                     //trainingProgram.openProgram(cursor.getPosition());
                     //db_id = trainingProgram.createNew("");
-                    db_id = trainingProgram.copyFrom(cursor.getPosition());
+                    isTemplate = Constants.TT_USER_PROGRAM_TEMPLATE;
+                    db_id = trainingProgram.copyFrom(cursor, currPosition);
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.setTitle(R.string.program_name);
                     final EditText input = new EditText(this);
@@ -66,7 +76,7 @@ public class TrainingProgramActivity extends AppCompatActivity{
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             trainingProgram.setName(input.getText().toString());
-                            trainingProgram.writeData(db_id, 0);
+                            trainingProgram.writeData(db_id, Constants.TT_USER_PROGRAM_TEMPLATE);
                         }
                     });
                     /*builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -81,8 +91,26 @@ public class TrainingProgramActivity extends AppCompatActivity{
             }
             else
             {
-                if(moveSetCursorPositionByID(cursor, db_id)) {
-                    trainingProgram.openProgram(cursor.getPosition());
+                int currPosition = getCursorPositionByID(db_id);
+                if(currPosition >= 0) {
+                    if(isViewMode == 0 &&
+                            isTemplate == Constants.TT_USER_PROGRAM_TEMPLATE) {
+                        isTemplate = Constants.TT_USER_PROGRAM;
+                        db_id = trainingProgram.copyFrom(cursor, currPosition);
+                        Date today = Calendar.getInstance(TimeZone.getDefault()).getTime();
+                        DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+                        String strDate = df.format(today);
+                        String newName = trainingProgram.getName() + " - " + strDate;
+                        trainingProgram.setName(newName);
+                        trainingProgram.writeData(db_id, isTemplate);
+                        int newPosition = getCursorPositionByID(db_id);
+                        if(newPosition >= 0) {
+                            trainingProgram.openProgram(cursor, newPosition);
+                        }
+                    }
+                    else {
+                        trainingProgram.openProgram(cursor, currPosition);
+                    }
                 }
                 else
                 {
@@ -121,16 +149,17 @@ public class TrainingProgramActivity extends AppCompatActivity{
         }
     }
 
-    boolean moveSetCursorPositionByID(Cursor cursor, long id) {
-        //cursor.moveToFirst();
+    int getCursorPositionByID(long id) {
+        //cursorPrograms.moveToFirst();
+        cursor = DBEngine.getTrainingProgramCursor(isTemplate);
         while(cursor.moveToNext()) {
             int dbID = cursor.getInt(cursor.getColumnIndex(TrainingProgramTable.COL_ID));
             if( dbID == (int)id ) {
-                return true;
+                return cursor.getPosition();
             }
         }
 
-        return false;
+        return -1;
     }
 
     @Override
@@ -145,7 +174,7 @@ public class TrainingProgramActivity extends AppCompatActivity{
                     adapter.setItem(position, trainingSet);
 
                     //update data in database
-                    trainingProgram.writeData(db_id, 0);
+                    trainingProgram.writeData(db_id, isTemplate);
                 }
             }
         }
