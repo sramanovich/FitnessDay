@@ -9,4 +9,10 @@
         <item name="windowActionBar">true</item>
     </style>
 
+    <style name="TabWidgetTheme" parent="AppTheme">
+        <item name="android:textColorPrimary">@color/colorButtonText</item>
+        <item name="android:textColorSecondary">@color/colorUnFocusedButtonText</item>
+        <item name="android:background">@color/colorToolbarBackground</item>>
+    </style>
+
 </resources>

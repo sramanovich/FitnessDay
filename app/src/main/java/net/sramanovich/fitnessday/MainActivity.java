@@ -22,9 +22,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        initToolbar();
+        //initToolbar();
 
-        DBEngine.init(this);
+        //DBEngine.init(this);
 
         Button btnExercises = (Button)findViewById(R.id.btnExercises);
         btnExercises.setOnClickListener(this);

@@ -43,7 +43,7 @@ public class ProgramsContentListActivity extends AppCompatActivity {
 
         setContentView(R.layout.programs_content);
 
-        initToolbar();
+        //initToolbar();
 
         try {
             mTable = TrainingProgramTable.getTrainingProgramTable();

@@ -3,6 +3,7 @@
     <color name="colorPrimary">#6a6ad2</color>
     <color name="colorPrimaryDark">#008a9a</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="colorToolbarBackground">#dcd0d0</color>
     <color name="colorMainBackground">#e2e2e2</color>
     <color name="colorListBackgroundTop">#fafafafa</color>
     <color name="colorListBackground">#4e4a4a</color>
@@ -12,5 +13,6 @@
     <color name="colorButtonNormal">#00acc1</color>
     <color name="colorButtonPressed">#4dabb6</color>
     <color name="colorButtonText">#000000</color>
+    <color name="colorUnFocusedButtonText">#767272</color>
     <color name="colorLayoutSeparator">#aeabab</color>
 </resources>

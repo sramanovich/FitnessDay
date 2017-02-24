@@ -28,8 +28,9 @@
     android:background="@color/colorMainBackground"
     tools:context=".MainActivity">
 
+    <!--
     <include android:id="@+id/toolbar"
-        layout="@layout/toolbar"/>
+        layout="@layout/toolbar"/> -->
 
     <Button
         android:layout_width="fill_parent"

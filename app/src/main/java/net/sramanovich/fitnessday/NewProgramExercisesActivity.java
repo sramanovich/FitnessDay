@@ -49,7 +49,7 @@ public class NewProgramExercisesActivity extends AppCompatActivity {
             lvData.setAdapter(cursorAdapter);
         }
 
-        initToolbar();
+        //initToolbar();
 
         FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

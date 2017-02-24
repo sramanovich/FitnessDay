@@ -5,8 +5,9 @@
     android:layout_height="match_parent"
     android:background="@color/colorListBackground">
 
+    <!--
     <include android:id="@+id/toolbar"
-        layout="@layout/toolbar"/>
+        layout="@layout/toolbar"/> -->
 
     <ListView
         android:layout_width="match_parent"

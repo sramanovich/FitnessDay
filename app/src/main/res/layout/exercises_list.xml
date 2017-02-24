@@ -7,8 +7,9 @@
               android:background="@color/colorListBackground"
               android:weightSum="1">
 
+    <!--
     <include android:id="@+id/toolbar"
-        layout="@layout/toolbar"/>
+        layout="@layout/toolbar"/>-->
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
