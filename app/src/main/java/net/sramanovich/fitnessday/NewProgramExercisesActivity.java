@@ -42,14 +42,14 @@ public class NewProgramExercisesActivity extends AppCompatActivity {
         ListView lvData = (ListView)findViewById(R.id.listExercises);
 
         Cursor cursor = DBEngine.getExercisesCursor();
-        String[] from = new String[]{ExercisesTable.COL_USED, ExercisesTable.COL_NAME, ExercisesTable.COL_TYPE};
-        int[] to = new int[]{R.id.checkBoxIsUsed, R.id.textViewProgramExerciseName, R.id.imageViewProgramExerciseType};
+        String[] from = new String[]{ExercisesTable.COL_USED, ExercisesTable.COL_NAME, ExercisesTable.COL_SPLIT_NR};
+        int[] to = new int[]{R.id.checkBoxIsUsed, R.id.textViewProgramExerciseName, R.id.buttonSplitNumber};
         cursorAdapter = ExercisesTable.getNewProgramExercisesCursorAdapter( DBEngine.getWritableDatabase(), this, R.layout.new_program_exercises_list_item, cursor, from, to, 0);
         if( cursorAdapter!= null ) {
             lvData.setAdapter(cursorAdapter);
         }
 
-        //initToolbar();
+        initToolbar();
 
         FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

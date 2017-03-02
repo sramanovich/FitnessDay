@@ -7,9 +7,8 @@
               android:background="@color/colorListBackground"
               android:weightSum="1">
 
-    <!--
     <include android:id="@+id/toolbar"
-        layout="@layout/toolbar"/>-->
+        layout="@layout/toolbar"/>
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -27,7 +26,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|right"
-            android:layout_margin="10dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginBottom="10dp"
             android:src="@drawable/check"
             app:rippleColor="@color/colorButtonNormal"
             app:backgroundTint="@color/colorButtonNormal"

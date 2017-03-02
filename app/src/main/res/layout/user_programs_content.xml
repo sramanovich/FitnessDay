@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorListBackground"
+    android:layout_weight="100">
+
+    <!--
+    <include android:id="@+id/toolbar"
+        layout="@layout/toolbar"/> -->
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/listViewPrograms"
+        android:choiceMode="singleChoice"
+        android:layout_weight="60"
+        android:background="@drawable/list_selector"/>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/listViewUserPrograms"
+        android:choiceMode="singleChoice"
+        android:background="@color/colorListBackground"
+        android:layout_weight="40"/>
+
+</LinearLayout>

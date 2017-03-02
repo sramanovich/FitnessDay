@@ -53,18 +53,18 @@ public class ExerciseSetActivity extends AppCompatActivity {
                 EditText repsEdit = (EditText)findViewById(R.id.editTextReps);
                 EditText weightEdit = (EditText)findViewById(R.id.editTextWeight);
                 int reps=0;
-                if(repsEdit.getText().toString().length()>0) {
+                if(!repsEdit.getText().toString().isEmpty()) {
                     reps = Integer.parseInt(repsEdit.getText().toString());
                 }
 
                 double weight=0;
-                if(weightEdit.getText().toString().length()>0) {
-                    weight = Double.parseDouble(weightEdit.getText().toString());
+                if(!weightEdit.getText().toString().isEmpty()) {
+                    weight = Integer.parseInt(weightEdit.getText().toString());
                 }
 
                 setList.add(new PairSet(reps, weight));
-                repsEdit.setText("");
-                weightEdit.setText("");
+                repsEdit.getText().toString();
+                weightEdit.getText().toString();
                 listAdapter.notifyDataSetChanged();
             }
         });

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+import android.support.v7.widget.ButtonBarLayout;
 import android.util.Log;
 import android.view.View;
 import android.widget.*;
@@ -17,6 +18,7 @@ public class ExercisesTable {
     public static final String COL_NAME = "NAME";
     public static final String COL_NOTE = "NOTE";
     public static final String COL_USED = "USED";
+    public static final String COL_SPLIT_NR = "SPLIT_NR";
     public static final String COL_TYPE = "TYPE";
     public static final String CREATE_TABLE_SQL =
             "create table "
@@ -24,6 +26,7 @@ public class ExercisesTable {
                     + COL_ID + " integer primary key autoincrement,"
                     + COL_NAME + " text,"
                     + COL_USED + " integer,"
+                    + COL_SPLIT_NR + " integer,"
                     + COL_TYPE + " integer,"
                     + COL_NOTE + " text"
                     + ")";
@@ -86,6 +89,7 @@ public class ExercisesTable {
         contValues.put(COL_TYPE, type.ordinal());
         contValues.put(COL_NOTE, note);
         contValues.put(COL_USED, 0);
+        contValues.put(COL_SPLIT_NR, 0);
         db.insert(DB_TABLE_NAME, null, contValues);
 
         return true;
@@ -145,10 +149,12 @@ class NewProgramExercisesCursorAdapter extends SimpleCursorAdapter {
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
+        int db_id = cursor.getInt(cursor.getColumnIndex(ExercisesTable.COL_ID));
         int isChecked = cursor.getInt(cursor.getColumnIndex(ExercisesTable.COL_USED));
         String name = cursor.getString(cursor.getColumnIndex(ExercisesTable.COL_NAME));
         int typeId = cursor.getInt(cursor.getColumnIndex(ExercisesTable.COL_TYPE));
         ExercisesTable.ExriciseType type = ExercisesTable.ExriciseType.fromId(typeId);
+        Integer splitNr = new Integer(cursor.getInt(cursor.getColumnIndex(ExercisesTable.COL_SPLIT_NR)));
 
         CheckBox chBox = (CheckBox) view.findViewById(R.id.checkBoxIsUsed);
         chBox.setOnCheckedChangeListener(myCheckChangeListener);
@@ -158,7 +164,14 @@ class NewProgramExercisesCursorAdapter extends SimpleCursorAdapter {
         TextView tvName = (TextView) view.findViewById(R.id.textViewProgramExerciseName);
         tvName.setText(name);
 
-        ImageView imgViewType = (ImageView) view.findViewById(R.id.imageViewProgramExerciseType);
+        Button btnSplitNr = (Button) view.findViewById(R.id.buttonSplitNumber);
+        if(btnSplitNr!=null) {
+            btnSplitNr.setTag(splitNr);
+            btnSplitNr.setOnClickListener(new ButtonClickListener(db_id));
+            setButtonValue(btnSplitNr, splitNr);
+        }
+
+        /*ImageView imgViewType = (ImageView) view.findViewById(R.id.imageViewProgramExerciseType);
 
         switch (type.getNumber()) {
             case 0:
@@ -173,7 +186,7 @@ class NewProgramExercisesCursorAdapter extends SimpleCursorAdapter {
             case 3:
                 imgViewType.setImageResource(R.drawable.cardio);
                 break;
-        }
+        }*/
     }
 
     CompoundButton.OnCheckedChangeListener myCheckChangeListener = new CompoundButton.OnCheckedChangeListener() {
@@ -188,6 +201,39 @@ class NewProgramExercisesCursorAdapter extends SimpleCursorAdapter {
             }
         }
     };
+
+    private void setButtonValue(Button btnSplitNr, int value) {
+        Integer splitNr = new Integer(value);
+        if (splitNr <= 0) {
+            btnSplitNr.setText("-");
+        } else {
+            btnSplitNr.setText(splitNr.toString());
+        }
+    }
+
+    class ButtonClickListener implements View.OnClickListener {
+
+        private int db_id=0;
+
+        public ButtonClickListener(int db_id) {
+            this.db_id = db_id;
+        }
+
+        @Override
+        public void onClick(View v) {
+            int splitNr = (int)v.getTag()+1;
+            v.setTag(splitNr);
+            Button btnSplitNr = (Button) v.findViewById(R.id.buttonSplitNumber);
+            setButtonValue(btnSplitNr, splitNr);
+            ContentValues cvValues = new ContentValues();
+            cvValues.put(ExercisesTable.COL_SPLIT_NR, splitNr);
+            try {
+                mDB.update(ExercisesTable.DB_TABLE_NAME, cvValues, "_id=?", new String[]{Integer.toString(db_id)});
+            } catch (SQLiteException e) {
+                Log.v("Database:", e.getMessage());
+            }
+        }
+    }
 }
 
 class ExercisesCursorAdapter extends SimpleCursorAdapter {

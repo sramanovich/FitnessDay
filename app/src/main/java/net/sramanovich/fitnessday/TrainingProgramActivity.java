@@ -65,9 +65,9 @@ public class TrainingProgramActivity extends AppCompatActivity{
                 if(currPosition >= 0) {
                     //trainingProgram.openProgram(cursor.getPosition());
                     //db_id = trainingProgram.createNew("");
-                    isTemplate = Constants.TT_USER_PROGRAM_TEMPLATE;
+                    isTemplate = Constants.TT_USER_PROGRAM; //TT_USER_PROGRAM_TEMPLATE
                     db_id = trainingProgram.copyFrom(cursor, currPosition);
-                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    /*AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.setTitle(R.string.program_name);
                     final EditText input = new EditText(this);
                     input.setInputType(InputType.TYPE_CLASS_TEXT);
@@ -79,6 +79,11 @@ public class TrainingProgramActivity extends AppCompatActivity{
                             trainingProgram.writeData(db_id, Constants.TT_USER_PROGRAM_TEMPLATE);
                         }
                     });
+                    */
+                    //Without ask program name
+                    trainingProgram.setName(trainingProgram.getMyProgramNewName());
+                    trainingProgram.writeData(db_id, Constants.TT_USER_PROGRAM_TEMPLATE);
+
                     /*builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -86,7 +91,7 @@ public class TrainingProgramActivity extends AppCompatActivity{
                         }
                     });*/
 
-                    builder.show();
+                    //builder.show();
                 }
             }
             else
@@ -97,10 +102,7 @@ public class TrainingProgramActivity extends AppCompatActivity{
                             isTemplate == Constants.TT_USER_PROGRAM_TEMPLATE) {
                         isTemplate = Constants.TT_USER_PROGRAM;
                         db_id = trainingProgram.copyFrom(cursor, currPosition);
-                        Date today = Calendar.getInstance(TimeZone.getDefault()).getTime();
-                        DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-                        String strDate = df.format(today);
-                        String newName = trainingProgram.getName() + " - " + strDate;
+                        String newName = trainingProgram.getMyProgramNewName();
                         trainingProgram.setName(newName);
                         trainingProgram.writeData(db_id, isTemplate);
                         int newPosition = getCursorPositionByID(db_id);

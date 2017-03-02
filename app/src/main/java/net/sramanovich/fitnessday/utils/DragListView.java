@@ -178,7 +178,7 @@ public class DragListView extends ListView {
                     dragSrcPosition<getAdapter().getCount()) {
                 TrainingProgramListAdapter adapter = (TrainingProgramListAdapter) getAdapter();
                 adapter.remove(dragSrcItem);
-                adapter.insert(new TrainingSet(0, ""), dragPosition);
+                adapter.insert(new TrainingSet(), dragPosition);
                 Log.v("onDrag: ", "emptyPosition="+dragPosition);
                 dragEmptyPosition = dragPosition;
             }

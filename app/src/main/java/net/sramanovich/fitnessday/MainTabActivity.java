@@ -38,10 +38,15 @@ public class MainTabActivity extends TabActivity {
         tabSpec.setContent(intentContent);
         tabHost.addTab(tabSpec);
 
-        tabSpec = tabHost.newTabSpec("tag3");
+        /*tabSpec = tabHost.newTabSpec("tag3");
         tabSpec.setIndicator("My Programs");
         Intent intentContent2 = new Intent(this, ProgramsContentListActivity.class);
         intentContent2.putExtra(Constants.INTENT_PARAM_IS_TEMPLATE, Constants.TT_USER_PROGRAM);
+        tabSpec.setContent(intentContent2);
+        tabHost.addTab(tabSpec);*/
+        tabSpec = tabHost.newTabSpec("tag3");
+        tabSpec.setIndicator("My Programs");
+        Intent intentContent2 = new Intent(this, UserProgramsContentListActivity.class);
         tabSpec.setContent(intentContent2);
         tabHost.addTab(tabSpec);
 

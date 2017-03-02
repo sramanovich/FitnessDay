@@ -30,13 +30,30 @@ public class DBEngine {
     }
 
     public static Cursor getTrainingProgramCursor(int isTemplate) {
-        String additionalQuery;
+        return getTrainingProgramCursor(isTemplate, "");
+    }
+
+    public static Cursor getTrainingProgramCursor(int isTemplate, String prgNameFilter) {
+        StringBuilder additionalQuery = new StringBuilder();
         if( isTemplate >= 0 ) {
-            additionalQuery = TrainingProgramTable.COL_IS_TEMPLATE + "=" + isTemplate;
+            additionalQuery.append(TrainingProgramTable.COL_IS_TEMPLATE);
+            additionalQuery.append("=");
+            additionalQuery.append(isTemplate);
         } else {
-            additionalQuery = "";
+            additionalQuery.setLength(0);
         }
 
-        return getReadableDatabase().query(TrainingProgramTable.DB_TABLE_NAME, null, additionalQuery, null, null, null, null);
+        if( !prgNameFilter.isEmpty() ) {
+            if( !additionalQuery.toString().isEmpty() ) {
+                additionalQuery.append(" AND ");
+                additionalQuery.append(TrainingProgramTable.COL_NAME);
+                additionalQuery.append(" LIKE '%");
+                additionalQuery.append(prgNameFilter);
+                additionalQuery.append("%'");
+            }
+
+        }
+
+        return getReadableDatabase().query(TrainingProgramTable.DB_TABLE_NAME, null, additionalQuery.toString(), null, null, null, null);
     }
 }

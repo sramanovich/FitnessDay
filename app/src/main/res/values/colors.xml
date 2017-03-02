@@ -14,5 +14,6 @@
     <color name="colorButtonPressed">#4dabb6</color>
     <color name="colorButtonText">#000000</color>
     <color name="colorUnFocusedButtonText">#767272</color>
+    <color name="colorButtonPickerBackground">#008a9a</color>
     <color name="colorLayoutSeparator">#aeabab</color>
 </resources>

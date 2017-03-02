@@ -52,6 +52,11 @@
             android:parentActivityName=".TrainingProgramActivity"
             android:label="@string/program">
         </activity>
+        <activity
+            android:name=".UserProgramsContentListActivity"
+            android:parentActivityName=".MainActivity"
+            android:label="@string/program">
+        </activity>
     </application>
 
 </manifest>

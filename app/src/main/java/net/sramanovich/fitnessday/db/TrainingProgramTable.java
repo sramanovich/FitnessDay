@@ -44,12 +44,13 @@ public class TrainingProgramTable {
                     + COL_NOTE +" text"
                     + ")";
 
-    public static final String SEPARATOR_E=";";
-    public static final String SEPARATOR_R=",";
-    public static final int SET_ITEMS_COUNT=3; // "exercise,reps,weight"
-    public static final int SET_ITEMS_EXERCISE_IDX=0;
-    public static final int SET_ITEMS_REPS_IDX=1;
-    public static final int SET_ITEMS_WEIGHT_IDX=2;
+    public static final String SEPARATOR_EXERCISE=";";
+    public static final String SEPARATOR_REPS=",";
+    public static final int SET_ITEMS_COUNT=4; // "split,exercise,reps,weight"
+    public static final int SET_ITEMS_SPLIT_IDX=0;
+    public static final int SET_ITEMS_EXERCISE_IDX=1;
+    public static final int SET_ITEMS_REPS_IDX=2;
+    public static final int SET_ITEMS_WEIGHT_IDX=3;
 
     private static TrainingProgramTable trainingProgramTable;
 
@@ -114,9 +115,18 @@ public class TrainingProgramTable {
         training.parseData(cursor, position);
     }
 
+    public String getMyProgramNewName() {
+        Date today = Calendar.getInstance(TimeZone.getDefault()).getTime();
+        DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+        String strDate = df.format(today);
+        String newName = getName() + " - " + strDate;
+        return newName;
+    }
+
     public String getTrainingExercises() {
         return training.collectExercises();
     }
+
     public void deleteRecord(long db_id) {
         try {
             DBEngine.getWritableDatabase().delete(DB_TABLE_NAME, "_id="+db_id, null);
@@ -182,17 +192,21 @@ public class TrainingProgramTable {
                 return;
 
             TextView tvProgramName = (TextView)view.findViewById(R.id.textViewProgramName);
-            tvProgramName.setText(strProgramName);
+            if( tvProgramName != null ) {
+                tvProgramName.setText(strProgramName);
+            }
 
             int db_time = cursor.getInt(cursor.getColumnIndex(COL_DATE));
             long time = (long)db_time*1000;
             Date date = new Date(time);
             TextView tvProgramDate = (TextView)view.findViewById(R.id.textViewProgramDate);
-            DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+            if( tvProgramDate != null ) {
+                DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 
-            String strDate = df.format(date);
-            Log.v("bindVew:", strDate+"("+date+")("+date.getTime()+")");
-            tvProgramDate.setText(strDate);
+                String strDate = df.format(date);
+                Log.v("bindVew:", strDate + "(" + date + ")(" + date.getTime() + ")");
+                tvProgramDate.setText(strDate);
+            }
         }
     }
 
@@ -209,9 +223,12 @@ public class TrainingProgramTable {
 
         public void createNew(Cursor cursorExercises) {
             listSets.clear();
+            int split_nr=0;
             while (cursorExercises.moveToNext()) {
                 if (cursorExercises.getInt(cursorExercises.getColumnIndex(ExercisesTable.COL_USED)) > 0) {
-                    TrainingSet set = new TrainingSet(cursorExercises.getPosition() + 1,
+                    split_nr = cursorExercises.getInt(cursorExercises.getColumnIndex(ExercisesTable.COL_SPLIT_NR));
+                    TrainingSet set = new TrainingSet(split_nr,
+                            cursorExercises.getPosition() + 1,
                             cursorExercises.getString(cursorExercises.getColumnIndex(ExercisesTable.COL_NAME)));
                     listSets.add(set);
                 }
@@ -231,12 +248,12 @@ public class TrainingProgramTable {
             listSets.clear();
 
             if(colExercisesValue!=null) {
-                String exercises[] = colExercisesValue.split(SEPARATOR_E);
+                String exercises[] = colExercisesValue.split(SEPARATOR_EXERCISE);
                 for (int e = 0; e < exercises.length; e++) {
-                    String sets[] = exercises[e].split(SEPARATOR_R);
+                    String sets[] = exercises[e].split(SEPARATOR_REPS);
                     if (sets.length < SET_ITEMS_COUNT && !exercises[e].isEmpty()) {
                         Integer id = new Integer(exercises[e]);
-                        TrainingSet trSet = new TrainingSet(id, "");
+                        TrainingSet trSet = new TrainingSet(0, id, "");
                         if(cursorExercises.moveToPosition(id-1)) {
                             trSet.exercise_name = cursorExercises.getString(cursorExercises.getColumnIndex(ExercisesTable.COL_NAME));
                         }
@@ -245,11 +262,12 @@ public class TrainingProgramTable {
                     }
 
                     int exercise_id = new Integer(sets[SET_ITEMS_EXERCISE_IDX]);
+                    int exercise_split = new Integer(sets[SET_ITEMS_SPLIT_IDX]);
                     String exercise_name="";
                     if(cursorExercises.moveToPosition(exercise_id-1)) {
                         exercise_name = cursorExercises.getString(cursorExercises.getColumnIndex(ExercisesTable.COL_NAME));
                     }
-                    TrainingSet trSet = new TrainingSet(exercise_id, exercise_name);
+                    TrainingSet trSet = new TrainingSet(exercise_split, exercise_id, exercise_name);
                     int location = listSets.indexOf(trSet);
                     if(location>=0) {
                         trSet = listSets.get(location);
@@ -274,17 +292,19 @@ public class TrainingProgramTable {
             for(TrainingSet trainingSet: listSets) {
                 if(!trainingSet.setList.isEmpty()) {
                     for(PairSet set: trainingSet.setList) {
+                        setExercise.append(trainingSet.split_nr);
+                        setExercise.append(SEPARATOR_REPS);
                         setExercise.append(trainingSet.exercise_id);
-                        setExercise.append(SEPARATOR_R);
+                        setExercise.append(SEPARATOR_REPS);
                         setExercise.append(set.getReps());
-                        setExercise.append(SEPARATOR_R);
+                        setExercise.append(SEPARATOR_REPS);
                         setExercise.append(set.getWeight());
-                        setExercise.append(SEPARATOR_E);
+                        setExercise.append(SEPARATOR_EXERCISE);
                     }
                 }
                 else {
                     setExercise.append(trainingSet.exercise_id);
-                    setExercise.append(SEPARATOR_E);
+                    setExercise.append(SEPARATOR_EXERCISE);
                 }
             }
 

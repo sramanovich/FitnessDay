@@ -1,29 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/colorListBackgroundTop">
+    android:layout_height="50dp"
+    android:background="@color/colorListBackgroundTop"
+    android:layout_weight="100">
 
     <CheckBox
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:id="@+id/checkBoxIsUsed"
-        android:buttonTint="@color/colorListText"/>
+        android:buttonTint="@color/colorListText"
+        android:layout_weight="5"/>
 
     <TextView
-        android:layout_width="210dp"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Exercise"
-        android:id="@+id/textViewProgramExerciseName"
-        android:layout_weight="0.73"
-        android:textColor="@color/colorListText"/>
-
-    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Exercise"
+        android:gravity="center_vertical"
+        android:id="@+id/textViewProgramExerciseName"
+        android:textColor="@color/colorListText"
+        android:layout_weight="94"/>
+
+    <Button
+        android:layout_width="30dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/buttonSplitNumber"
+        android:text="1"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="15dp"
+        android:layout_weight="1"
+        android:background="@drawable/round_button_picker"/>
+
+    <!--<ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/imageViewProgramExerciseType"
-        android:layout_weight="0.25"/>
+        android:layout_weight="8"/>-->
 
 </LinearLayout>
