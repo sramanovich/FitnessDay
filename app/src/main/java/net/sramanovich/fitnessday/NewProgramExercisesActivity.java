@@ -7,20 +7,26 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.CursorAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import net.sramanovich.fitnessday.adapters.BodyPartRecycleViewAdapter;
 import net.sramanovich.fitnessday.db.DBEngine;
 import net.sramanovich.fitnessday.db.ExercisesTable;
 import net.sramanovich.fitnessday.db.TrainingProgramTable;
+import net.sramanovich.fitnessday.utils.RecyclerItemClickListener;
 
 /**
  * Activity - exercises list with check boxes
@@ -33,11 +39,34 @@ public class NewProgramExercisesActivity extends AppCompatActivity {
     private Cursor cursor;
     private Toolbar toolbar;
     private long db_id;
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.exercises_list);
+
+        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerViewBodyParts);
+        //mRecyclerView.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        String[] strData = {"Body1","Body2","Body3","Body4","Body5","Body6","Body7","Body8","Body9","Body10","Body11","Body12","Body13","Body14"};
+        mAdapter = new BodyPartRecycleViewAdapter(this, strData);
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(this, mRecyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override public void onItemClick(View view, int position) {
+                        Log.v("OnClick:", " position="+position);
+                    }
+
+                    @Override public void onLongItemClick(View view, int position) {
+                    }
+                })
+        );
 
         ListView lvData = (ListView)findViewById(R.id.listExercises);
 

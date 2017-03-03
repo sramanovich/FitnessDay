@@ -5,10 +5,19 @@
               android:layout_width="fill_parent"
               android:layout_height="match_parent"
               android:background="@color/colorListBackground"
-              android:weightSum="1">
+              android:weightSum="100">
 
     <include android:id="@+id/toolbar"
         layout="@layout/toolbar"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerViewBodyParts"
+        android:scrollbars="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorListBackgroundTop"
+        android:layout_weight="70"
+        android:clickable="true" />
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -19,7 +28,8 @@
         <ListView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/listExercises" />
+            android:id="@+id/listExercises"
+            android:layout_weight="30"/>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"
