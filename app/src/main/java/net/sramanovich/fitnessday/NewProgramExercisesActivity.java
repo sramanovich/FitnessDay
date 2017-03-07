@@ -54,13 +54,13 @@ public class NewProgramExercisesActivity extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        String[] strData = {"Body1","Body2","Body3","Body4","Body5","Body6","Body7","Body8","Body9","Body10","Body11","Body12","Body13","Body14"};
-        mAdapter = new BodyPartRecycleViewAdapter(this, strData);
+        mAdapter = new BodyPartRecycleViewAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(this, mRecyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
                     @Override public void onItemClick(View view, int position) {
-                        Log.v("OnClick:", " position="+position);
+                        Cursor cursor = DBEngine.getExercisesCursor(position);
+                        cursorAdapter.swapCursor(cursor);
                     }
 
                     @Override public void onLongItemClick(View view, int position) {
@@ -148,8 +148,9 @@ public class NewProgramExercisesActivity extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
-                    case R.id.menu_add: {
-                        addNewExercise();
+                    case R.id.menu_save: {
+                        //addNewExercise();
+                        onSaveProgram();
                         break;
                     }
                 }

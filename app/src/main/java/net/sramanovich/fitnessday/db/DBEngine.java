@@ -26,7 +26,20 @@ public class DBEngine {
     }
 
     public static Cursor getExercisesCursor() {
-         return getReadableDatabase().query(ExercisesTable.DB_TABLE_NAME, null, null, null, null, null, null);
+        return getExercisesCursor(0);
+    }
+
+    public static Cursor getExercisesCursor(int body_part) {
+        StringBuilder additionalQuery = new StringBuilder();
+        if (body_part > 0 ) {
+            additionalQuery.append(ExercisesTable.COL_BODY_PART);
+            additionalQuery.append("=");
+            additionalQuery.append(body_part);
+        } else {
+            additionalQuery.setLength(0);
+        }
+
+        return getReadableDatabase().query(ExercisesTable.DB_TABLE_NAME, null, additionalQuery.toString(), null, null, null, null);
     }
 
     public static Cursor getTrainingProgramCursor(int isTemplate) {

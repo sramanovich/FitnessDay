@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@color/colorListBackgroundTop">
 
+    <ImageView
+        android:layout_width="80dp"
+        android:layout_height="137dp"
+        android:layout_marginRight="1dp"
+        android:background="@color/colorListBackgroundTop"
+        android:id="@+id/imgViewBodyPart"/>
+
     <TextView
-        android:id="@+id/info_text"
-        android:layout_width="100dp"
+        android:id="@+id/textViewBodyPartName"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textAlignment="center"
         android:textColor="@color/colorListText"/>
-</RelativeLayout>
+</LinearLayout>

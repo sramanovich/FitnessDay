@@ -20,6 +20,7 @@ public class ExercisesTable {
     public static final String COL_USED = "USED";
     public static final String COL_SPLIT_NR = "SPLIT_NR";
     public static final String COL_TYPE = "TYPE";
+    public static final String COL_BODY_PART = "BODY_PART";
     public static final String CREATE_TABLE_SQL =
             "create table "
                     + DB_TABLE_NAME + " ("
@@ -28,6 +29,7 @@ public class ExercisesTable {
                     + COL_USED + " integer,"
                     + COL_SPLIT_NR + " integer,"
                     + COL_TYPE + " integer,"
+                    + COL_BODY_PART + " integer,"
                     + COL_NOTE + " text"
                     + ")";
 
@@ -64,32 +66,76 @@ public class ExercisesTable {
         }
     }
 
-    public static void initData(SQLiteDatabase db, Context ctx) {
-        insertRow(db, ctx.getString(R.string.exercise_1), ExriciseType.EX_BODY_WEIGHT, "");
-        insertRow(db, ctx.getString(R.string.exercise_2), ExriciseType.EX_BODY_WEIGHT, "");
-        insertRow(db, ctx.getString(R.string.exercise_3), ExriciseType.EX_BODY_WEIGHT, "");
-        insertRow(db, ctx.getString(R.string.exercise_4), ExriciseType.EX_BAR, "");
-        insertRow(db, ctx.getString(R.string.exercise_5), ExriciseType.EX_BAR, "");
-        insertRow(db, ctx.getString(R.string.exercise_6), ExriciseType.EX_BAR, "");
-        insertRow(db, ctx.getString(R.string.exercise_7), ExriciseType.EX_BAR, "");
-        insertRow(db, ctx.getString(R.string.exercise_8), ExriciseType.EX_DUMBBELL, "");
-        insertRow(db, ctx.getString(R.string.exercise_9), ExriciseType.EX_DUMBBELL, "");
-        insertRow(db, ctx.getString(R.string.exercise_10), ExriciseType.EX_BAR, "");
-        insertRow(db, ctx.getString(R.string.exercise_11), ExriciseType.EX_BAR, "");
-        insertRow(db, ctx.getString(R.string.exercise_12), ExriciseType.EX_BAR, "");
-        insertRow(db, ctx.getString(R.string.exercise_13), ExriciseType.EX_BAR, "");
-        insertRow(db, ctx.getString(R.string.exercise_14), ExriciseType.EX_DUMBBELL, "");
-        insertRow(db, ctx.getString(R.string.exercise_15), ExriciseType.EX_DUMBBELL, "");
-        insertRow(db, ctx.getString(R.string.exercise_16), ExriciseType.EX_BODY_WEIGHT, "");
+    public enum BodyPart {
+        BODY_PART_ALL(0, "All"),
+        BODY_PART_ABDOMINALS(1, "Abdominals"),
+        BODY_PART_BICEPS(2, "Biceps"),
+        BODY_PART_CALVES(3, "Calves"),
+        BODY_PART_CHEST(4, "Chest"),
+        BODY_PART_FOREARMS(5, "Forearms"),
+        BODY_PART_GLUTES(6, "Glutes"),
+        BODY_PART_HAMSTRINGS(7, "Hamstrings"),
+        BODY_PART_LATS(8, "Lats"),
+        BODY_PART_LOWER_BACK(9, "Lower back"),
+        BODY_PART_QUADS(10, "Quads"),
+        BODY_PART_SHOULDERS(11, "Shoulders"),
+        BODY_PART_TRAPS(12, "Traps"),
+        BODY_PART_TRICEPS(13, "Triceps");
+
+        private final int number;
+
+        private final String name;
+
+        public int getNumber() {
+            return number;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        private BodyPart(int number, String name) {
+            this.number = number;
+            this.name = name;
+        }
+
+        public static BodyPart fromId(int id) {
+            for (BodyPart type : BodyPart.values()) {
+                if (type.getNumber() == id) {
+                    return type;
+                }
+            }
+            return null;
+        }
     }
 
-    private static boolean insertRow(SQLiteDatabase db, String name, ExriciseType type, String note) {
+    public static void initData(SQLiteDatabase db, Context ctx) {
+        insertRow(db, ctx.getString(R.string.exercise_1), ExriciseType.EX_BODY_WEIGHT, "", BodyPart.BODY_PART_TRICEPS);
+        insertRow(db, ctx.getString(R.string.exercise_2), ExriciseType.EX_BODY_WEIGHT, "", BodyPart.BODY_PART_CHEST);
+        insertRow(db, ctx.getString(R.string.exercise_3), ExriciseType.EX_BODY_WEIGHT, "", BodyPart.BODY_PART_LATS);
+        insertRow(db, ctx.getString(R.string.exercise_4), ExriciseType.EX_BAR, "", BodyPart.BODY_PART_QUADS);
+        insertRow(db, ctx.getString(R.string.exercise_5), ExriciseType.EX_BAR, "", BodyPart.BODY_PART_QUADS);
+        insertRow(db, ctx.getString(R.string.exercise_6), ExriciseType.EX_BAR, "", BodyPart.BODY_PART_BICEPS);
+        insertRow(db, ctx.getString(R.string.exercise_7), ExriciseType.EX_BAR, "", BodyPart.BODY_PART_TRICEPS);
+        insertRow(db, ctx.getString(R.string.exercise_8), ExriciseType.EX_DUMBBELL, "", BodyPart.BODY_PART_CHEST);
+        insertRow(db, ctx.getString(R.string.exercise_9), ExriciseType.EX_DUMBBELL, "", BodyPart.BODY_PART_CHEST);
+        insertRow(db, ctx.getString(R.string.exercise_10), ExriciseType.EX_BAR, "", BodyPart.BODY_PART_CHEST);
+        insertRow(db, ctx.getString(R.string.exercise_11), ExriciseType.EX_BAR, "", BodyPart.BODY_PART_LOWER_BACK);
+        insertRow(db, ctx.getString(R.string.exercise_12), ExriciseType.EX_BAR, "", BodyPart.BODY_PART_HAMSTRINGS);
+        insertRow(db, ctx.getString(R.string.exercise_13), ExriciseType.EX_BAR, "", BodyPart.BODY_PART_LATS);
+        insertRow(db, ctx.getString(R.string.exercise_14), ExriciseType.EX_DUMBBELL, "", BodyPart.BODY_PART_SHOULDERS);
+        insertRow(db, ctx.getString(R.string.exercise_15), ExriciseType.EX_DUMBBELL, "", BodyPart.BODY_PART_SHOULDERS);
+        insertRow(db, ctx.getString(R.string.exercise_16), ExriciseType.EX_BODY_WEIGHT, "", BodyPart.BODY_PART_SHOULDERS);
+    }
+
+    private static boolean insertRow(SQLiteDatabase db, String name, ExriciseType type, String note, BodyPart body_part) {
         ContentValues contValues = new ContentValues();
         contValues.put(COL_NAME, name);
         contValues.put(COL_TYPE, type.ordinal());
         contValues.put(COL_NOTE, note);
         contValues.put(COL_USED, 0);
         contValues.put(COL_SPLIT_NR, 0);
+        contValues.put(COL_BODY_PART, body_part.ordinal());
         db.insert(DB_TABLE_NAME, null, contValues);
 
         return true;
@@ -158,7 +204,7 @@ class NewProgramExercisesCursorAdapter extends SimpleCursorAdapter {
 
         CheckBox chBox = (CheckBox) view.findViewById(R.id.checkBoxIsUsed);
         chBox.setOnCheckedChangeListener(myCheckChangeListener);
-        chBox.setTag(cursor.getPosition());
+        chBox.setTag(db_id);
         chBox.setChecked(isChecked > 0);
 
         TextView tvName = (TextView) view.findViewById(R.id.textViewProgramExerciseName);
@@ -195,7 +241,7 @@ class NewProgramExercisesCursorAdapter extends SimpleCursorAdapter {
             ContentValues cvIsCheckedValues = new ContentValues();
             cvIsCheckedValues.put(ExercisesTable.COL_USED, isChecked);
             try {
-                 mDB.update(ExercisesTable.DB_TABLE_NAME, cvIsCheckedValues, "_id=?", new String[]{Integer.toString((int) buttonView.getTag() + 1)});
+                 mDB.update(ExercisesTable.DB_TABLE_NAME, cvIsCheckedValues, "_id=?", new String[]{Integer.toString((int) buttonView.getTag())});
             } catch (SQLiteException e) {
                 Log.v("Database:", e.getMessage());
             }

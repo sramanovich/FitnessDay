@@ -2,6 +2,7 @@
 <resources>
     <string name="menu_search">Search</string>
     <string name="menu_add">Add</string>
+    <string name="menu_save">Save</string>
     <string name="menu_create">Create</string>
     <string name="menu_delete">Delete</string>
     <string name="app_name">FitnessDay</string>
