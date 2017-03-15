@@ -11,11 +11,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.CursorAdapter;
 import android.widget.EditText;
@@ -47,7 +45,7 @@ public class NewProgramExercisesActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.exercises_list);
+        setContentView(R.layout.new_program);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerViewBodyParts);
         //mRecyclerView.setHasFixedSize(true);
@@ -80,20 +78,20 @@ public class NewProgramExercisesActivity extends AppCompatActivity {
 
         initToolbar();
 
-        FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.fab);
+        /*FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onSaveProgram();
             }
-        });
+        });*/
 
         //AskNameDialog.init(this);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.exercises_list_menu, menu);
+        getMenuInflater().inflate(R.menu.create_program_menu, menu);
         return true;
     }
 
@@ -159,12 +157,6 @@ public class NewProgramExercisesActivity extends AppCompatActivity {
         });
 
         //toolbar.inflateMenu(R.menu.exercises_list_menu);
-    }
-
-    private void addNewExercise() {
-        Intent intent = new Intent(this, ExerciseEditorActivity.class);
-        intent.putExtra(Constants.INTENT_PARAM_ID, 0);
-        startActivityForResult(intent, 1);
     }
 
     @Override

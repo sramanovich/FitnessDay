@@ -4,26 +4,29 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorListBackground"
-    android:layout_weight="100">
-
-    <!--
-    <include android:id="@+id/toolbar"
-        layout="@layout/toolbar"/> -->
+    android:weightSum="100">
 
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/listViewPrograms"
         android:choiceMode="singleChoice"
-        android:layout_weight="60"
+        android:layout_weight="35"
         android:background="@drawable/list_selector"/>
+
+    <LinearLayout
+        android:id="@+id/calendar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="22">
+    </LinearLayout>
 
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/listViewUserPrograms"
+        android:id="@+id/listViewDayUserPrograms"
         android:choiceMode="singleChoice"
         android:background="@color/colorListBackground"
-        android:layout_weight="40"/>
-
+        android:layout_weight="45"/>
 </LinearLayout>

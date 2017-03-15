@@ -59,27 +59,11 @@ public class TrainingProgramActivity extends AppCompatActivity{
             cursor = DBEngine.getTrainingProgramCursor(isTemplate);
             trainingProgram = TrainingProgramTable.getTrainingProgramTable();
 
-            Log.v("Training program:", "onCreate(), IsTemplate="+isTemplate);
             if(isTemplate == Constants.TT_PROGRAM_TEMPLATE) {
                 int currPosition = getCursorPositionByID(db_id);
                 if(currPosition >= 0) {
-                    //trainingProgram.openProgram(cursor.getPosition());
-                    //db_id = trainingProgram.createNew("");
-                    isTemplate = Constants.TT_USER_PROGRAM; //TT_USER_PROGRAM_TEMPLATE
+                    isTemplate = Constants.TT_USER_PROGRAM;
                     db_id = trainingProgram.copyFrom(cursor, currPosition);
-                    /*AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                    builder.setTitle(R.string.program_name);
-                    final EditText input = new EditText(this);
-                    input.setInputType(InputType.TYPE_CLASS_TEXT);
-                    builder.setView(input);
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            trainingProgram.setName(input.getText().toString());
-                            trainingProgram.writeData(db_id, Constants.TT_USER_PROGRAM_TEMPLATE);
-                        }
-                    });
-                    */
                     //Without ask program name
                     trainingProgram.setName(trainingProgram.getMyProgramNewName());
                     trainingProgram.writeData(db_id, Constants.TT_USER_PROGRAM_TEMPLATE);

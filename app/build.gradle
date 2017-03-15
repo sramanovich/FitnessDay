@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "21.1.2"
+    buildToolsVersion '25.0.0'
 
     defaultConfig {
         applicationId "net.sramanovich.fitnessday"
@@ -34,4 +34,5 @@ dependencies {
     compile 'com.android.support:design:23.2.0'
     compile 'com.android.support:recyclerview-v7:23.0.+'
     testCompile 'junit:junit:4.12'
+    compile files('libs/date4j.jar')
 }

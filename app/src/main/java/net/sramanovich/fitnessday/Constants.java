@@ -18,6 +18,9 @@ public class Constants {
     public static final int    DB_VERSION = 1;
     public static final String DB_NAME = "Fitness";
 
+    public static final String USER_PROGRAM_NAME_SEPARATOR = " - ";
+
+    public static final int TT_ALL_PROGRAMS = -1;
     public static final int TT_USER_PROGRAM_TEMPLATE = 0;
     public static final int TT_PROGRAM_TEMPLATE = 1;
     public static final int TT_USER_PROGRAM = 2;

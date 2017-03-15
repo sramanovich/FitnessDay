@@ -67,6 +67,26 @@ public class TrainingProgramTable {
         return trainingProgramTable;
     }
 
+    public static boolean compareNormalizedDates(Date date1, Date date2) {
+        date1.setHours(0);
+        date1.setMinutes(0);
+        date1.setSeconds(0);
+        date2.setHours(0);
+        date2.setMinutes(0);
+        date2.setSeconds(0);
+        long time1 = date1.getTime();
+        time1 = time1/1000;
+        time1 = time1*1000;
+        long time2 = date2.getTime();
+        time2 = time2/1000;
+        time2 = time2*1000;
+        if (time1==time2) {
+            return true;
+        }
+
+        return false;
+    }
+
     public long copyFrom(Cursor cursor, int srcPosition) {
         try {
             //training.init(name);
@@ -119,7 +139,7 @@ public class TrainingProgramTable {
         Date today = Calendar.getInstance(TimeZone.getDefault()).getTime();
         DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         String strDate = df.format(today);
-        String newName = getName() + " - " + strDate;
+        String newName = getName() + Constants.USER_PROGRAM_NAME_SEPARATOR + strDate;
         return newName;
     }
 
@@ -135,6 +155,41 @@ public class TrainingProgramTable {
             return;
         }
 
+    }
+
+    public Cursor getLastTrainingProgram() {
+        Cursor cursor = DBEngine.getTrainingProgramCursor(Constants.TT_USER_PROGRAM);
+        long lastTime = 0;
+        int position = -1;
+        String programName = new String("");
+        while (cursor.moveToNext()) {
+            int db_time = cursor.getInt(cursor.getColumnIndex(TrainingProgramTable.COL_DATE));
+            long time = (long) db_time * 1000;
+            if (time>lastTime) {
+                //db_id = cursor.getLong(cursor.getColumnIndex(TrainingProgramTable.COL_ID));
+                position = cursor.getPosition();
+                lastTime = time;
+                programName = cursor.getString(cursor.getColumnIndex(TrainingProgramTable.COL_NAME));
+            }
+        }
+
+        Date curDate = Calendar.getInstance().getTime();
+        if (compareNormalizedDates(curDate, new Date(lastTime))==false) {
+            StringBuilder prgNameBuilder = new StringBuilder(programName);
+            int index = prgNameBuilder.indexOf(Constants.USER_PROGRAM_NAME_SEPARATOR);
+            return findTrainingProgram(programName.substring(0, index));
+        }
+
+        cursor.moveToPosition(position);
+        return cursor;
+    }
+
+    public Cursor  findTrainingProgram(String name) {
+        name.trim();
+        Cursor cursor = DBEngine.getTrainingProgramCursor(Constants.TT_PROGRAM_TEMPLATE, name);
+        cursor.moveToFirst();
+
+        return cursor;
     }
 
     public void setName(String name) {

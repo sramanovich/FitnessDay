@@ -4,6 +4,7 @@ import android.app.TabActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TabHost;
 
@@ -32,6 +33,13 @@ public class MainTabActivity extends TabActivity {
         tabHost.addTab(tabSpec);
 
         tabSpec = tabHost.newTabSpec("tag2");
+        tabSpec.setIndicator("Exercises");
+        Intent intentExercises = new Intent(this, ExercisesActivity.class);
+        //intentExercises.putExtra(Constants.INTENT_PARAM_ID, this);
+        tabSpec.setContent(intentExercises);
+        tabHost.addTab(tabSpec);
+
+        tabSpec = tabHost.newTabSpec("tag3");
         tabSpec.setIndicator("Select Program");
         Intent intentContent = new Intent(this, ProgramsContentListActivity.class);
         intentContent.putExtra(Constants.INTENT_PARAM_IS_TEMPLATE, Constants.TT_PROGRAM_TEMPLATE);
@@ -44,16 +52,34 @@ public class MainTabActivity extends TabActivity {
         intentContent2.putExtra(Constants.INTENT_PARAM_IS_TEMPLATE, Constants.TT_USER_PROGRAM);
         tabSpec.setContent(intentContent2);
         tabHost.addTab(tabSpec);*/
-        tabSpec = tabHost.newTabSpec("tag3");
+        tabSpec = tabHost.newTabSpec("tag4");
         tabSpec.setIndicator("My Programs");
         Intent intentContent2 = new Intent(this, UserProgramsContentListActivity.class);
         tabSpec.setContent(intentContent2);
         tabHost.addTab(tabSpec);
 
-        tabSpec = tabHost.newTabSpec("tag4");
+        tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
+            @Override
+            public void onTabChanged(String tabId) {
+                Menu menu = toolbar.getMenu();
+                menu.clear();
+                switch(tabId) {
+                    case "tag1":
+                    case "tag3":
+                        toolbar.inflateMenu(R.menu.menu);
+                        break;
+                    case "tag2": {
+                        toolbar.inflateMenu(R.menu.exercises_menu);
+                        break;
+                    }
+                }
+            }
+        });
+
+        /*tabSpec = tabHost.newTabSpec("tag4");
         tabSpec.setIndicator("Calendar");
         tabSpec.setContent(new Intent(this, ExercisesActivity.class));
-        tabHost.addTab(tabSpec);
+        tabHost.addTab(tabSpec);*/
     }
 
     private void initToolbar() {
@@ -63,7 +89,12 @@ public class MainTabActivity extends TabActivity {
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                System.out.println(item.toString());
+                switch (item.getItemId()) {
+                    case R.id.menu_save: {
+                        //addNewExercise();
+                        break;
+                    }
+                }
                 return false;
             }
         });

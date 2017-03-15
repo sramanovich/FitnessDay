@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="fill_parent"
-              android:layout_height="match_parent"
-              android:background="@color/colorListBackground"
-              android:weightSum="100">
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorListBackground"
+    android:weightSum="100">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerViewBodyParts"
-            android:scrollbars="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/colorListBackground"
-            android:layout_weight="65"
-            android:clickable="true" />
+    <include android:id="@+id/toolbar"
+        layout="@layout/toolbar"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerViewBodyParts"
+        android:scrollbars="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorListBackground"
+        android:layout_weight="65"
+        android:clickable="true" />
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"

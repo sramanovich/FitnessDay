@@ -1,6 +1,7 @@
 package net.sramanovich.fitnessday;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -26,30 +27,44 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //DBEngine.init(this);
 
-        Button btnExercises = (Button)findViewById(R.id.btnExercises);
-        btnExercises.setOnClickListener(this);
         Button btnCreateProgram = (Button)findViewById(R.id.btnCreateProgram);
         btnCreateProgram.setOnClickListener(this);
-        Button btnSelectProgram = (Button)findViewById(R.id.btnSelectProgram);
+        Button btnSelectProgram = (Button)findViewById(R.id.btnBeginTraining);
         btnSelectProgram.setOnClickListener(this);
-        Button btnMyPrograms = (Button)findViewById(R.id.btnMyPrograms);
+        Button btnMyPrograms = (Button)findViewById(R.id.btnTransformation);
         btnMyPrograms.setOnClickListener(this);
-        Button btnContinueLastProgram = (Button)findViewById(R.id.btnContinueLastProgram);
-        btnContinueLastProgram.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         switch(v.getId()) {
-            case R.id.btnExercises: {
-                Intent intentExercise = new Intent(this, ExercisesActivity.class);
-                startActivity(intentExercise);
+            case R.id.btnBeginTraining: {
+                Cursor cursor = TrainingProgramTable.getTrainingProgramTable().getLastTrainingProgram();
+                if (cursor.getPosition() >= 0) {
+                    int db_id = cursor.getInt(cursor.getColumnIndex(TrainingProgramTable.COL_ID));
+                    int isTemplate = cursor.getInt(cursor.getColumnIndex(TrainingProgramTable.COL_IS_TEMPLATE));
+                    Intent intentProgram = new Intent(this, TrainingProgramActivity.class);
+                    intentProgram.putExtra(Constants.INTENT_PARAM_ID, db_id);
+                    if (isTemplate == Constants.TT_USER_PROGRAM) {  //open program
+                        intentProgram.putExtra(Constants.INTENT_PARAM_IS_TEMPLATE, Constants.TT_USER_PROGRAM);
+
+                    } else {    //start new program
+                        intentProgram.putExtra(Constants.INTENT_PARAM_IS_TEMPLATE, Constants.TT_PROGRAM_TEMPLATE);
+                    }
+                    startActivity(intentProgram);
+                }
                 break;
             }
 
             case R.id.btnCreateProgram: {
                 Intent intentNewProgramExercises = new Intent(this, NewProgramExercisesActivity.class);
                 startActivity(intentNewProgramExercises);
+                break;
+            }
+            /*
+            case R.id.btnExercises: {
+                Intent intentExercise = new Intent(this, ExercisesActivity.class);
+                startActivity(intentExercise);
                 break;
             }
 
@@ -65,14 +80,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 intentContent.putExtra(Constants.INTENT_PARAM_IS_TEMPLATE, Constants.TT_USER_PROGRAM_TEMPLATE);
                 startActivity(intentContent);
                 break;
-            }
-
-            case R.id.btnContinueLastProgram: {
-                Intent intentContent = new Intent(this, ProgramsContentListActivity.class);
-                intentContent.putExtra(Constants.INTENT_PARAM_IS_TEMPLATE, Constants.TT_USER_PROGRAM);
-                startActivity(intentContent);
-                break;
-            }
+            }*/
         }
     }
 

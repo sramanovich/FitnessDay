@@ -7,7 +7,7 @@
 
     <ImageView
         android:layout_width="80dp"
-        android:layout_height="137dp"
+        android:layout_height="160dp"
         android:layout_marginRight="1dp"
         android:background="@color/colorListBackgroundTop"
         android:id="@+id/imgViewBodyPart"/>
