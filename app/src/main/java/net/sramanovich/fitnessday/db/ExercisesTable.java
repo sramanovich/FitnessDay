@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.ButtonBarLayout;
 import android.util.Log;
 import android.view.View;
@@ -217,6 +219,35 @@ class NewProgramExercisesCursorAdapter extends SimpleCursorAdapter {
             setButtonValue(btnSplitNr, splitNr);
         }
 
+        LinearLayout layoutItemColor = (LinearLayout)view.findViewById(R.id.linLayoutNewProgramItem);
+
+        switch(splitNr) {
+            case 1:
+                layoutItemColor.setBackgroundColor(view.getResources().getColor(R.color.colorExerciseListBackground1));
+                break;
+            case 2:
+                layoutItemColor.setBackgroundColor(view.getResources().getColor(R.color.colorExerciseListBackground2));
+                break;
+            case 3:
+                layoutItemColor.setBackgroundColor(view.getResources().getColor(R.color.colorExerciseListBackground3));
+                break;
+            case 4:
+                layoutItemColor.setBackgroundColor(view.getResources().getColor(R.color.colorExerciseListBackground4));
+                break;
+            case 5:
+                layoutItemColor.setBackgroundColor(view.getResources().getColor(R.color.colorExerciseListBackground5));
+                break;
+            case 6:
+                layoutItemColor.setBackgroundColor(view.getResources().getColor(R.color.colorExerciseListBackground6));
+                break;
+            case 7:
+                layoutItemColor.setBackgroundColor(view.getResources().getColor(R.color.colorExerciseListBackground7));
+                break;
+            default:
+                layoutItemColor.setBackgroundColor(view.getResources().getColor(R.color.colorExerciseListBackgroundDef));
+                break;
+        }
+
         /*ImageView imgViewType = (ImageView) view.findViewById(R.id.imageViewProgramExerciseType);
 
         switch (type.getNumber()) {
@@ -268,6 +299,10 @@ class NewProgramExercisesCursorAdapter extends SimpleCursorAdapter {
         @Override
         public void onClick(View v) {
             int splitNr = (int)v.getTag()+1;
+            if (splitNr > 7) {
+                splitNr = 0;
+            }
+
             v.setTag(splitNr);
             Button btnSplitNr = (Button) v.findViewById(R.id.buttonSplitNumber);
             setButtonValue(btnSplitNr, splitNr);
@@ -278,6 +313,9 @@ class NewProgramExercisesCursorAdapter extends SimpleCursorAdapter {
             } catch (SQLiteException e) {
                 Log.v("Database:", e.getMessage());
             }
+
+            Cursor cursor = DBEngine.getExercisesCursor();
+            swapCursor(cursor);
         }
     }
 }

@@ -119,12 +119,20 @@ public class NewProgramExercisesActivity extends AppCompatActivity {
                 }
                 ExercisesTable.resetUsedFlag();
                 closeActivity();
+                onStartProgram(db_id);
             }
         });
 
         builder.show();
         //ModalDialogThread t = new ModalDialogThread("Program:");
         //t.execute();
+    }
+
+    private void onStartProgram(long db_id) {
+        Intent intentProgram = new Intent(this, TrainingProgramActivity.class);
+        intentProgram.putExtra(Constants.INTENT_PARAM_ID, (int)db_id);
+        intentProgram.putExtra(Constants.INTENT_PARAM_IS_TEMPLATE, Constants.TT_PROGRAM_TEMPLATE);
+        startActivity(intentProgram);
     }
 
     private void closeActivity() {
