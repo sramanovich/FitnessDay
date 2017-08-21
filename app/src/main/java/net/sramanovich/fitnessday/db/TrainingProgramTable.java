@@ -177,7 +177,9 @@ public class TrainingProgramTable {
         if (compareNormalizedDates(curDate, new Date(lastTime))==false) {
             StringBuilder prgNameBuilder = new StringBuilder(programName);
             int index = prgNameBuilder.indexOf(Constants.USER_PROGRAM_NAME_SEPARATOR);
-            return findTrainingProgram(programName.substring(0, index));
+            if (index >= 0) {
+                return findTrainingProgram(programName.substring(0, index));
+            }
         }
 
         cursor.moveToPosition(position);

@@ -95,14 +95,14 @@ public class ExercisesActivity extends AppCompatActivity {
         }
 
         toolbar.setTitle(R.string.app_name);
-        toolbar.setSubtitle(R.string.exercies);
+        //toolbar.setSubtitle(R.string.exercies);
         //toolbar.setLogo(R.drawable.ic_launcher);
         setSupportActionBar(toolbar);
 
         // add back arrow to toolbar
         if (getSupportActionBar() != null){
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            getSupportActionBar().setDisplayShowHomeEnabled(false);
         }
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
