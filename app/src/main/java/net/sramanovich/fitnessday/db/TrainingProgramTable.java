@@ -90,7 +90,7 @@ public class TrainingProgramTable {
     public long copyFrom(Cursor cursor, int srcPosition) {
         try {
             //training.init(name);
-            training.parseData(cursor, srcPosition);
+            training.parseData(cursor, srcPosition, 0);
             ContentValues cvSetValues = new ContentValues();
             cvSetValues.put(COL_NAME, training.name);
             cvSetValues.put(COL_IS_TEMPLATE, Constants.TT_PROGRAM_TEMPLATE);
@@ -132,7 +132,7 @@ public class TrainingProgramTable {
 
     public void openProgram(Cursor cursor, int position) {
 
-        training.parseData(cursor, position);
+        training.parseData(cursor, position, 0);
     }
 
     public String getMyProgramNewName() {
@@ -237,6 +237,10 @@ public class TrainingProgramTable {
         return new ProgramsContentListAdapter(context, layout, c, from, to, flags);
     }
 
+    public void setSplitFilter(Cursor cursorPrograms, int position, int splitNrFilter) {
+        //training.parseData(cursorPrograms, position, splitNrFilter);
+    }
+
     class ProgramsContentListAdapter extends SimpleCursorAdapter {
         public ProgramsContentListAdapter(Context context, int layout, Cursor c, String[] from, int[] to, int flags) {
             super(context, layout, c, from, to, flags);
@@ -292,11 +296,12 @@ public class TrainingProgramTable {
             }
         }
 
-        public boolean parseData(Cursor cursorPrograms, int position) {
+        public boolean parseData(Cursor cursorPrograms, int position, int splitNrFilter) {
             //Cursor cursorPrograms = DBEngine.getTrainingProgramCursor(-1);
             if(!cursorPrograms.moveToPosition(position)) {
                 return false;
             }
+
             Cursor cursorExercises = DBEngine.getExercisesCursor();
             name = cursorPrograms.getString(cursorPrograms.getColumnIndex(COL_NAME));
             note = cursorPrograms.getString(cursorPrograms.getColumnIndex(COL_NOTE));
@@ -308,9 +313,13 @@ public class TrainingProgramTable {
                 String exercises[] = colExercisesValue.split(SEPARATOR_EXERCISE);
                 for (int e = 0; e < exercises.length; e++) {
                     String sets[] = exercises[e].split(SEPARATOR_REPS);
-                    if (sets.length < SET_ITEMS_COUNT && !exercises[e].isEmpty()) {
-                        Integer id = new Integer(exercises[e]);
-                        TrainingSet trSet = new TrainingSet(0, id, "");
+                    if (sets.length < SET_ITEMS_COUNT && sets.length >= 2) {
+                        Integer split_nr = new Integer(sets[SET_ITEMS_SPLIT_IDX]);
+                        Integer id = new Integer(sets[SET_ITEMS_EXERCISE_IDX]);
+                        /*if (splitNrFilter > 0 && splitNrFilter != split_nr ) {
+                            continue;
+                        }*/
+                        TrainingSet trSet = new TrainingSet(split_nr, id, "");
                         if(cursorExercises.moveToPosition(id-1)) {
                             trSet.exercise_name = cursorExercises.getString(cursorExercises.getColumnIndex(ExercisesTable.COL_NAME));
                         }
@@ -320,6 +329,10 @@ public class TrainingProgramTable {
 
                     int exercise_id = new Integer(sets[SET_ITEMS_EXERCISE_IDX]);
                     int exercise_split = new Integer(sets[SET_ITEMS_SPLIT_IDX]);
+                    /*if (splitNrFilter > 0 && splitNrFilter != exercise_split ) {
+                        continue;
+                    }*/
+
                     String exercise_name="";
                     if(cursorExercises.moveToPosition(exercise_id-1)) {
                         exercise_name = cursorExercises.getString(cursorExercises.getColumnIndex(ExercisesTable.COL_NAME));
@@ -360,6 +373,8 @@ public class TrainingProgramTable {
                     }
                 }
                 else {
+                    setExercise.append(trainingSet.split_nr);
+                    setExercise.append(SEPARATOR_REPS);
                     setExercise.append(trainingSet.exercise_id);
                     setExercise.append(SEPARATOR_EXERCISE);
                 }

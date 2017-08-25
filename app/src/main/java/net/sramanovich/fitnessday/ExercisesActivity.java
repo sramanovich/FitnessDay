@@ -39,8 +39,8 @@ public class ExercisesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.exercises_list);
-        Intent intent = getIntent();
-        //intent.ge
+
+        ExercisesTable.resetUsedFlag();
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerViewBodyParts);
         mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);

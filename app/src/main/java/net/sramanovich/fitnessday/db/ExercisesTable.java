@@ -115,19 +115,29 @@ public class ExercisesTable {
         insertRow(db, ctx.getString(R.string.exercise_1), ExriciseType.EX_BODY_WEIGHT, "", BodyPart.BODY_PART_TRICEPS);
         insertRow(db, ctx.getString(R.string.exercise_2), ExriciseType.EX_BODY_WEIGHT, "", BodyPart.BODY_PART_CHEST);
         insertRow(db, ctx.getString(R.string.exercise_3), ExriciseType.EX_BODY_WEIGHT, "", BodyPart.BODY_PART_LATS);
-        insertRow(db, ctx.getString(R.string.exercise_4), ExriciseType.EX_BAR, "", BodyPart.BODY_PART_QUADS);
+        insertRow(db, ctx.getString(R.string.exercise_4), ExriciseType.EX_BODY_WEIGHT, "", BodyPart.BODY_PART_QUADS);
         insertRow(db, ctx.getString(R.string.exercise_5), ExriciseType.EX_BAR, "", BodyPart.BODY_PART_QUADS);
-        insertRow(db, ctx.getString(R.string.exercise_6), ExriciseType.EX_BAR, "", BodyPart.BODY_PART_BICEPS);
-        insertRow(db, ctx.getString(R.string.exercise_7), ExriciseType.EX_BAR, "", BodyPart.BODY_PART_TRICEPS);
-        insertRow(db, ctx.getString(R.string.exercise_8), ExriciseType.EX_DUMBBELL, "", BodyPart.BODY_PART_CHEST);
-        insertRow(db, ctx.getString(R.string.exercise_9), ExriciseType.EX_DUMBBELL, "", BodyPart.BODY_PART_CHEST);
-        insertRow(db, ctx.getString(R.string.exercise_10), ExriciseType.EX_BAR, "", BodyPart.BODY_PART_CHEST);
-        insertRow(db, ctx.getString(R.string.exercise_11), ExriciseType.EX_BAR, "", BodyPart.BODY_PART_LOWER_BACK);
-        insertRow(db, ctx.getString(R.string.exercise_12), ExriciseType.EX_BAR, "", BodyPart.BODY_PART_HAMSTRINGS);
-        insertRow(db, ctx.getString(R.string.exercise_13), ExriciseType.EX_BAR, "", BodyPart.BODY_PART_LATS);
-        insertRow(db, ctx.getString(R.string.exercise_14), ExriciseType.EX_DUMBBELL, "", BodyPart.BODY_PART_SHOULDERS);
-        insertRow(db, ctx.getString(R.string.exercise_15), ExriciseType.EX_DUMBBELL, "", BodyPart.BODY_PART_SHOULDERS);
-        insertRow(db, ctx.getString(R.string.exercise_16), ExriciseType.EX_BODY_WEIGHT, "", BodyPart.BODY_PART_SHOULDERS);
+        insertRow(db, ctx.getString(R.string.exercise_6), ExriciseType.EX_BAR, "", BodyPart.BODY_PART_QUADS);
+        insertRow(db, ctx.getString(R.string.exercise_7), ExriciseType.EX_BAR, "", BodyPart.BODY_PART_BICEPS);
+        insertRow(db, ctx.getString(R.string.exercise_8), ExriciseType.EX_BAR, "", BodyPart.BODY_PART_TRICEPS);
+        insertRow(db, ctx.getString(R.string.exercise_9), ExriciseType.EX_BAR, "", BodyPart.BODY_PART_CHEST);
+        insertRow(db, ctx.getString(R.string.exercise_10), ExriciseType.EX_DUMBBELL, "", BodyPart.BODY_PART_CHEST);
+        insertRow(db, ctx.getString(R.string.exercise_11), ExriciseType.EX_BAR, "", BodyPart.BODY_PART_CHEST);
+        insertRow(db, ctx.getString(R.string.exercise_12), ExriciseType.EX_BAR, "", BodyPart.BODY_PART_SHOULDERS);
+        insertRow(db, ctx.getString(R.string.exercise_13), ExriciseType.EX_BAR, "", BodyPart.BODY_PART_SHOULDERS);
+        insertRow(db, ctx.getString(R.string.exercise_14), ExriciseType.EX_BAR, "", BodyPart.BODY_PART_BICEPS);
+        insertRow(db, ctx.getString(R.string.exercise_15), ExriciseType.EX_DUMBBELL, "", BodyPart.BODY_PART_BICEPS);
+        insertRow(db, ctx.getString(R.string.exercise_16), ExriciseType.EX_BAR, "", BodyPart.BODY_PART_LOWER_BACK);
+        insertRow(db, ctx.getString(R.string.exercise_17), ExriciseType.EX_BAR, "", BodyPart.BODY_PART_HAMSTRINGS);
+        insertRow(db, ctx.getString(R.string.exercise_18), ExriciseType.EX_BAR, "", BodyPart.BODY_PART_LATS);
+        insertRow(db, ctx.getString(R.string.exercise_19), ExriciseType.EX_DUMBBELL, "", BodyPart.BODY_PART_LATS);
+        insertRow(db, ctx.getString(R.string.exercise_20), ExriciseType.EX_BAR, "", BodyPart.BODY_PART_SHOULDERS);
+        insertRow(db, ctx.getString(R.string.exercise_21), ExriciseType.EX_BAR, "", BodyPart.BODY_PART_SHOULDERS);
+        insertRow(db, ctx.getString(R.string.exercise_22), ExriciseType.EX_DUMBBELL, "", BodyPart.BODY_PART_SHOULDERS);
+        insertRow(db, ctx.getString(R.string.exercise_23), ExriciseType.EX_BODY_WEIGHT, "", BodyPart.BODY_PART_LOWER_BACK);
+        insertRow(db, ctx.getString(R.string.exercise_24), ExriciseType.EX_BODY_WEIGHT, "", BodyPart.BODY_PART_ABDOMINALS);
+        insertRow(db, ctx.getString(R.string.exercise_25), ExriciseType.EX_BODY_WEIGHT, "", BodyPart.BODY_PART_ABDOMINALS);
+        insertRow(db, ctx.getString(R.string.exercise_26), ExriciseType.EX_BODY_WEIGHT, "", BodyPart.BODY_PART_CALVES);
     }
 
     private static boolean insertRow(SQLiteDatabase db, String name, ExriciseType type, String note, BodyPart body_part) {
@@ -147,6 +157,7 @@ public class ExercisesTable {
 
         ContentValues cvSetValues = new ContentValues();
         cvSetValues.put(COL_USED, 0);
+        cvSetValues.put(COL_SPLIT_NR, 0);
 
         try {
                DBEngine.getWritableDatabase().update(DB_TABLE_NAME, cvSetValues, null, null);
@@ -180,143 +191,9 @@ public class ExercisesTable {
         return new ExercisesCursorAdapter(context, layout, c, from, to, flags);
     }
 
-    public static NewProgramExercisesCursorAdapter getNewProgramExercisesCursorAdapter(SQLiteDatabase db, Context context, int layout,
-                                                                                       Cursor c, String[] from, int[] to, int flags) {
-        return new NewProgramExercisesCursorAdapter(db, context, layout, c, from, to, flags);
-    }
-}
-
-class NewProgramExercisesCursorAdapter extends SimpleCursorAdapter {
-
-    private SQLiteDatabase mDB;
-
-    public NewProgramExercisesCursorAdapter(SQLiteDatabase db, Context context, int layout, Cursor c, String[] from, int[] to, int flags) {
-        super(context, layout, c, from, to, flags);
-        mDB = db;
-    }
-
-    @Override
-    public void bindView(View view, Context context, Cursor cursor) {
-        int db_id = cursor.getInt(cursor.getColumnIndex(ExercisesTable.COL_ID));
-        int isChecked = cursor.getInt(cursor.getColumnIndex(ExercisesTable.COL_USED));
-        String name = cursor.getString(cursor.getColumnIndex(ExercisesTable.COL_NAME));
-        int typeId = cursor.getInt(cursor.getColumnIndex(ExercisesTable.COL_TYPE));
-        ExercisesTable.ExriciseType type = ExercisesTable.ExriciseType.fromId(typeId);
-        Integer splitNr = new Integer(cursor.getInt(cursor.getColumnIndex(ExercisesTable.COL_SPLIT_NR)));
-
-        CheckBox chBox = (CheckBox) view.findViewById(R.id.checkBoxIsUsed);
-        chBox.setOnCheckedChangeListener(myCheckChangeListener);
-        chBox.setTag(db_id);
-        chBox.setChecked(isChecked > 0);
-
-        TextView tvName = (TextView) view.findViewById(R.id.textViewProgramExerciseName);
-        tvName.setText(name);
-
-        Button btnSplitNr = (Button) view.findViewById(R.id.buttonSplitNumber);
-        if(btnSplitNr!=null) {
-            btnSplitNr.setTag(splitNr);
-            btnSplitNr.setOnClickListener(new ButtonClickListener(db_id));
-            setButtonValue(btnSplitNr, splitNr);
-        }
-
-        LinearLayout layoutItemColor = (LinearLayout)view.findViewById(R.id.linLayoutNewProgramItem);
-
-        switch(splitNr) {
-            case 1:
-                layoutItemColor.setBackgroundColor(view.getResources().getColor(R.color.colorExerciseListBackground1));
-                break;
-            case 2:
-                layoutItemColor.setBackgroundColor(view.getResources().getColor(R.color.colorExerciseListBackground2));
-                break;
-            case 3:
-                layoutItemColor.setBackgroundColor(view.getResources().getColor(R.color.colorExerciseListBackground3));
-                break;
-            case 4:
-                layoutItemColor.setBackgroundColor(view.getResources().getColor(R.color.colorExerciseListBackground4));
-                break;
-            case 5:
-                layoutItemColor.setBackgroundColor(view.getResources().getColor(R.color.colorExerciseListBackground5));
-                break;
-            case 6:
-                layoutItemColor.setBackgroundColor(view.getResources().getColor(R.color.colorExerciseListBackground6));
-                break;
-            case 7:
-                layoutItemColor.setBackgroundColor(view.getResources().getColor(R.color.colorExerciseListBackground7));
-                break;
-            default:
-                layoutItemColor.setBackgroundColor(view.getResources().getColor(R.color.colorExerciseListBackgroundDef));
-                break;
-        }
-
-        /*ImageView imgViewType = (ImageView) view.findViewById(R.id.imageViewProgramExerciseType);
-
-        switch (type.getNumber()) {
-            case 0:
-                imgViewType.setImageResource(R.drawable.workout);
-                break;
-            case 1:
-                imgViewType.setImageResource(R.drawable.bar);
-                break;
-            case 2:
-                imgViewType.setImageResource(R.drawable.dumbbell);
-                break;
-            case 3:
-                imgViewType.setImageResource(R.drawable.cardio);
-                break;
-        }*/
-    }
-
-    CompoundButton.OnCheckedChangeListener myCheckChangeListener = new CompoundButton.OnCheckedChangeListener() {
-        @Override
-        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            ContentValues cvIsCheckedValues = new ContentValues();
-            cvIsCheckedValues.put(ExercisesTable.COL_USED, isChecked);
-            try {
-                 mDB.update(ExercisesTable.DB_TABLE_NAME, cvIsCheckedValues, "_id=?", new String[]{Integer.toString((int) buttonView.getTag())});
-            } catch (SQLiteException e) {
-                Log.v("Database:", e.getMessage());
-            }
-        }
-    };
-
-    private void setButtonValue(Button btnSplitNr, int value) {
-        Integer splitNr = new Integer(value);
-        if (splitNr <= 0) {
-            btnSplitNr.setText("-");
-        } else {
-            btnSplitNr.setText(splitNr.toString());
-        }
-    }
-
-    class ButtonClickListener implements View.OnClickListener {
-
-        private int db_id=0;
-
-        public ButtonClickListener(int db_id) {
-            this.db_id = db_id;
-        }
-
-        @Override
-        public void onClick(View v) {
-            int splitNr = (int)v.getTag()+1;
-            if (splitNr > 7) {
-                splitNr = 0;
-            }
-
-            v.setTag(splitNr);
-            Button btnSplitNr = (Button) v.findViewById(R.id.buttonSplitNumber);
-            setButtonValue(btnSplitNr, splitNr);
-            ContentValues cvValues = new ContentValues();
-            cvValues.put(ExercisesTable.COL_SPLIT_NR, splitNr);
-            try {
-                mDB.update(ExercisesTable.DB_TABLE_NAME, cvValues, "_id=?", new String[]{Integer.toString(db_id)});
-            } catch (SQLiteException e) {
-                Log.v("Database:", e.getMessage());
-            }
-
-            Cursor cursor = DBEngine.getExercisesCursor();
-            swapCursor(cursor);
-        }
+    public static NewProgramExercisesCursorAdapter getNewProgramExercisesCursorAdapter(SQLiteDatabase db, int bodyPartPositionFilter, Context context,
+                                                                                       int layout, Cursor c, String[] from, int[] to, int flags) {
+        return new NewProgramExercisesCursorAdapter(db, bodyPartPositionFilter, context, layout, c, from, to, flags);
     }
 }
 

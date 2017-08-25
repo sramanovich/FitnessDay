@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import net.sramanovich.fitnessday.Constants;
@@ -15,7 +16,10 @@ import net.sramanovich.fitnessday.ExerciseSetActivity;
 import net.sramanovich.fitnessday.R;
 import net.sramanovich.fitnessday.db.TrainingSet;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.ListIterator;
 
 public class TrainingProgramListAdapter extends ArrayAdapter<TrainingSet> {
 
@@ -28,7 +32,7 @@ public class TrainingProgramListAdapter extends ArrayAdapter<TrainingSet> {
     public TrainingProgramListAdapter(Context context, List<TrainingSet> objects) {
         super(context, 0, objects);
         this.context = context;
-        this.objects = objects;
+        this.objects = new ArrayList<>(objects);
         this.lInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -80,6 +84,42 @@ public class TrainingProgramListAdapter extends ArrayAdapter<TrainingSet> {
         if(btnStart!=null) {
             btnStart.setTag(position);
             btnStart.setOnClickListener(new ButtonClickListener());
+            if (set.setList.isEmpty()) {
+                btnStart.setText("Start");
+            } else {
+                btnStart.setText("Continue");
+            }
+        }
+
+        LinearLayout layoutItemColor = (LinearLayout) view.findViewById(R.id.program_item_layout);
+        if (layoutItemColor != null ) {
+
+            switch (set.split_nr) {
+                case 1:
+                    layoutItemColor.setBackgroundColor(view.getResources().getColor(R.color.colorExerciseListBackground1));
+                    break;
+                case 2:
+                    layoutItemColor.setBackgroundColor(view.getResources().getColor(R.color.colorExerciseListBackground2));
+                    break;
+                case 3:
+                    layoutItemColor.setBackgroundColor(view.getResources().getColor(R.color.colorExerciseListBackground3));
+                    break;
+                case 4:
+                    layoutItemColor.setBackgroundColor(view.getResources().getColor(R.color.colorExerciseListBackground4));
+                    break;
+                case 5:
+                    layoutItemColor.setBackgroundColor(view.getResources().getColor(R.color.colorExerciseListBackground5));
+                    break;
+                case 6:
+                    layoutItemColor.setBackgroundColor(view.getResources().getColor(R.color.colorExerciseListBackground6));
+                    break;
+                case 7:
+                    layoutItemColor.setBackgroundColor(view.getResources().getColor(R.color.colorExerciseListBackground7));
+                    break;
+                default:
+                    layoutItemColor.setBackgroundColor(view.getResources().getColor(R.color.colorExerciseListBackgroundDef));
+                    break;
+            }
         }
 
         return view;
@@ -98,6 +138,16 @@ public class TrainingProgramListAdapter extends ArrayAdapter<TrainingSet> {
 
         Activity activity = (Activity)context;
         activity.startActivityForResult(intent, 1);
+    }
+
+    public void setSplitFilter(int split_nr) {
+        ListIterator<TrainingSet> iter = objects.listIterator();
+        while(iter.hasNext()) {
+            TrainingSet set = iter.next();
+            if(split_nr >0 && set.split_nr != split_nr ) {
+                iter.remove();
+            }
+        }
     }
 
     class ButtonClickListener implements View.OnClickListener {

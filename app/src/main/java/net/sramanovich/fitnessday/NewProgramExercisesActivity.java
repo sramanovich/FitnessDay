@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,6 +22,7 @@ import android.widget.Toast;
 import net.sramanovich.fitnessday.adapters.BodyPartRecycleViewAdapter;
 import net.sramanovich.fitnessday.db.DBEngine;
 import net.sramanovich.fitnessday.db.ExercisesTable;
+import net.sramanovich.fitnessday.db.NewProgramExercisesCursorAdapter;
 import net.sramanovich.fitnessday.db.TrainingProgramTable;
 import net.sramanovich.fitnessday.utils.RecyclerItemClickListener;
 
@@ -33,19 +33,22 @@ import net.sramanovich.fitnessday.utils.RecyclerItemClickListener;
  */
 
 public class NewProgramExercisesActivity extends AppCompatActivity {
-    private CursorAdapter cursorAdapter;
+    private NewProgramExercisesCursorAdapter cursorAdapter;
     private Cursor cursor;
     private Toolbar toolbar;
     private long db_id;
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private int recycleViewPosition;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_program);
+
+        ExercisesTable.resetUsedFlag();
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerViewBodyParts);
         //mRecyclerView.setHasFixedSize(true);
@@ -57,8 +60,7 @@ public class NewProgramExercisesActivity extends AppCompatActivity {
         mRecyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(this, mRecyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
                     @Override public void onItemClick(View view, int position) {
-                        Cursor cursor = DBEngine.getExercisesCursor(position);
-                        cursorAdapter.swapCursor(cursor);
+                        setFilterByBodyPart(position);
                     }
 
                     @Override public void onLongItemClick(View view, int position) {
@@ -71,28 +73,25 @@ public class NewProgramExercisesActivity extends AppCompatActivity {
         Cursor cursor = DBEngine.getExercisesCursor();
         String[] from = new String[]{ExercisesTable.COL_USED, ExercisesTable.COL_NAME, ExercisesTable.COL_SPLIT_NR};
         int[] to = new int[]{R.id.checkBoxIsUsed, R.id.textViewProgramExerciseName, R.id.buttonSplitNumber};
-        cursorAdapter = ExercisesTable.getNewProgramExercisesCursorAdapter( DBEngine.getWritableDatabase(), this, R.layout.new_program_exercises_list_item, cursor, from, to, 0);
+        cursorAdapter = ExercisesTable.getNewProgramExercisesCursorAdapter( DBEngine.getWritableDatabase(), recycleViewPosition, this,
+                                                                            R.layout.new_program_exercises_list_item, cursor, from, to, 0);
         if( cursorAdapter!= null ) {
             lvData.setAdapter(cursorAdapter);
         }
 
         initToolbar();
-
-        /*FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onSaveProgram();
-            }
-        });*/
-
-        //AskNameDialog.init(this);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.create_program_menu, menu);
         return true;
+    }
+
+    private void setFilterByBodyPart(int position) {
+        cursorAdapter.setBodyPartPositionFilter(position);
+        Cursor cursor = DBEngine.getExercisesCursor(position);
+        cursorAdapter.swapCursor(cursor);
     }
 
     private void onSaveProgram() {

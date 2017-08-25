@@ -1,6 +1,7 @@
 package net.sramanovich.fitnessday;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -13,6 +14,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -36,9 +38,13 @@ public class TrainingProgramActivity extends AppCompatActivity{
 
     private TrainingProgramTable trainingProgram;
 
+    private DragListView lvData;
+
     private long db_id=0;
 
     private int isTemplate=0;
+
+    private int splitNrFilter;
 
     private Toolbar toolbar;
 
@@ -47,8 +53,6 @@ public class TrainingProgramActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.training_program);
-
-        initToolbar();
 
         try {
             Intent intent = getIntent();
@@ -112,7 +116,7 @@ public class TrainingProgramActivity extends AppCompatActivity{
                 return;
             }
 
-            DragListView lvData = (DragListView) findViewById(R.id.trainingListView);
+            lvData = (DragListView) findViewById(R.id.trainingListView);
 
             if(isViewMode>0) {
                 adapter = trainingProgram.getTrainingProgramViewAdapter(this);
@@ -133,6 +137,25 @@ public class TrainingProgramActivity extends AppCompatActivity{
             Toast toast= Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT);
             toast.show();
         }
+
+        Button splitTotalButton = (Button) findViewById(R.id.buttonSplitTotal);
+        splitTotalButton.setOnClickListener(new SplitButtonClickListener(this, 0));
+        Button splitButton1 = (Button) findViewById(R.id.buttonSplit1);
+        splitButton1.setOnClickListener(new SplitButtonClickListener(this, 1));
+        Button splitButton2 = (Button) findViewById(R.id.buttonSplit2);
+        splitButton2.setOnClickListener(new SplitButtonClickListener(this, 2));
+        Button splitButton3 = (Button) findViewById(R.id.buttonSplit3);
+        splitButton3.setOnClickListener(new SplitButtonClickListener(this, 3));
+        Button splitButton4 = (Button) findViewById(R.id.buttonSplit4);
+        splitButton4.setOnClickListener(new SplitButtonClickListener(this, 4));
+        Button splitButton5 = (Button) findViewById(R.id.buttonSplit5);
+        splitButton5.setOnClickListener(new SplitButtonClickListener(this, 5));
+        Button splitButton6 = (Button) findViewById(R.id.buttonSplit6);
+        splitButton6.setOnClickListener(new SplitButtonClickListener(this, 6));
+        Button splitButton7 = (Button) findViewById(R.id.buttonSplit7);
+        splitButton7.setOnClickListener(new SplitButtonClickListener(this, 7));
+
+        initToolbar();
     }
 
     int getCursorPositionByID(long id) {
@@ -176,7 +199,9 @@ public class TrainingProgramActivity extends AppCompatActivity{
     private void initToolbar() {
         toolbar = (Toolbar)findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.app_name);
-        toolbar.setSubtitle(R.string.training_programs);
+        if (trainingProgram != null) {
+            toolbar.setSubtitle(trainingProgram.getName());
+        }
         //toolbar.setLogo(R.drawable.ic_launcher);
         setSupportActionBar(toolbar);
 
@@ -192,5 +217,26 @@ public class TrainingProgramActivity extends AppCompatActivity{
                 return false;
             }
         });
+    }
+
+    class SplitButtonClickListener implements View.OnClickListener {
+
+        private int split_nr;
+
+        private Context context;
+
+        public SplitButtonClickListener(Context context, int split_nr) {
+            this.context = context;
+            this.split_nr = split_nr;
+        }
+
+        @Override
+        public void onClick(View v) {
+            splitNrFilter = split_nr;
+            //trainingProgram.setSplitFilter(cursor, cursor.getPosition(), split_nr);
+            adapter = trainingProgram.getTrainingProgramAdapter(context);
+            adapter.setSplitFilter(split_nr);
+            lvData.setAdapter(adapter);
+        }
     }
 }
