@@ -18,6 +18,7 @@ import net.sramanovich.fitnessday.db.TrainingSet;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -150,6 +151,21 @@ public class TrainingProgramListAdapter extends ArrayAdapter<TrainingSet> {
         }
     }
 
+    public void sortList(){
+        Collections.sort(objects, new Comparator<TrainingSet>() {
+            @Override
+            public int compare(TrainingSet lhs, TrainingSet rhs) {
+                if (lhs.split_nr > rhs.split_nr) {
+                    return 1;
+                }
+                else if (lhs.split_nr < rhs.split_nr) {
+                    return -1;
+                }
+
+                return 0;
+            }
+        });
+    }
     class ButtonClickListener implements View.OnClickListener {
 
         @Override

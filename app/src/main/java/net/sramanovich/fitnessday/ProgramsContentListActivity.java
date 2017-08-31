@@ -4,11 +4,15 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.ContextMenu;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
@@ -17,7 +21,7 @@ import android.widget.Toast;
 import net.sramanovich.fitnessday.db.DBEngine;
 import net.sramanovich.fitnessday.db.TrainingProgramTable;
 
-public class ProgramsContentListActivity extends AppCompatActivity {
+public class ProgramsContentListActivity extends Fragment {
 
     final int MENU_ITEM_DELETE_PROGRAM=1;
 
@@ -37,27 +41,38 @@ public class ProgramsContentListActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    private View parent_view;
 
-        setContentView(R.layout.programs_content);
+    private static ProgramsContentListActivity mInstance = null;
+
+    public static ProgramsContentListActivity getInstance() {
+        if (mInstance==null) {
+            mInstance = new ProgramsContentListActivity();
+        }
+
+        return mInstance;
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        parent_view = inflater.inflate(R.layout.programs_content,container,false);
 
         //initToolbar();
 
         try {
             mTable = TrainingProgramTable.getTrainingProgramTable();
 
-            Intent intent = getIntent();
-            isTemplate = intent.getIntExtra(Constants.INTENT_PARAM_IS_TEMPLATE, Constants.TT_PROGRAM_TEMPLATE);
+            if (getArguments() != null) {
+                isTemplate = getArguments().getInt(Constants.INTENT_PARAM_IS_TEMPLATE, Constants.TT_PROGRAM_TEMPLATE);
+            }
 
             cursor = DBEngine.getTrainingProgramCursor(isTemplate);
             String[] from = new String[]{TrainingProgramTable.COL_NAME, TrainingProgramTable.COL_DATE};
             int[] to = new int[]{R.id.textViewProgramName, R.id.textViewProgramDate};
 
-            cursorAdapter = mTable.getProgramsContentListAdapter(this, R.layout.programs_content_item, cursor, from, to, 0);
+            cursorAdapter = mTable.getProgramsContentListAdapter(parent_view.getContext(), R.layout.programs_content_item, cursor, from, to, 0);
 
-            ListView lvPrograms = (ListView) findViewById(R.id.listViewPrograms);
+            ListView lvPrograms = (ListView) parent_view.findViewById(R.id.listViewPrograms);
             lvPrograms.setAdapter(cursorAdapter);
             lvPrograms.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
@@ -80,9 +95,11 @@ public class ProgramsContentListActivity extends AppCompatActivity {
 
 
         } catch(SQLiteException e) {
-            Toast toast= Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT);
+            Toast toast= Toast.makeText(parent_view.getContext(), e.getMessage(), Toast.LENGTH_SHORT);
             toast.show();
         }
+
+        return parent_view;
     }
 
     @Override
@@ -131,30 +148,30 @@ public class ProgramsContentListActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         cursor = DBEngine.getTrainingProgramCursor(isTemplate);
         cursorAdapter.swapCursor(cursor);
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
         cursor.close();
     }
 
     private void initToolbar() {
-        toolbar = (Toolbar)findViewById(R.id.toolbar);
+        toolbar = (Toolbar)parent_view.findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.app_name);
         //toolbar.setSubtitle(R.string.training_programs);
         //toolbar.setLogo(R.drawable.ic_launcher);
-        setSupportActionBar(toolbar);
+        //setSupportActionBar(toolbar);
 
         // add back arrow to toolbar
-        if (getSupportActionBar() != null){
+        /*if (getSupportActionBar() != null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
             getSupportActionBar().setDisplayShowHomeEnabled(false);
-        }
+        }*/
 
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
@@ -165,21 +182,21 @@ public class ProgramsContentListActivity extends AppCompatActivity {
     }
 
     private void onStartProgram(long id) {
-        Intent intentNewProgram = new Intent(this, TrainingProgramActivity.class);
+        Intent intentNewProgram = new Intent(parent_view.getContext(), TrainingProgramActivity.class);
         intentNewProgram.putExtra(Constants.INTENT_PARAM_ID, (int)id);
         intentNewProgram.putExtra(Constants.INTENT_PARAM_IS_TEMPLATE, isTemplate);
         startActivity(intentNewProgram);
     }
 
     private void onOpenProgram(long id) {
-        Intent intentProgram = new Intent(this, TrainingProgramActivity.class);
+        Intent intentProgram = new Intent(parent_view.getContext(), TrainingProgramActivity.class);
         intentProgram.putExtra(Constants.INTENT_PARAM_ID, (int)id);
         intentProgram.putExtra(Constants.INTENT_PARAM_IS_TEMPLATE, isTemplate);
         startActivity(intentProgram);
     }
 
     private void onViewProgram(long id) {
-        Intent intentProgram = new Intent(this, TrainingProgramActivity.class);
+        Intent intentProgram = new Intent(parent_view.getContext(), TrainingProgramActivity.class);
         intentProgram.putExtra(Constants.INTENT_PARAM_ID, (int)id);
         intentProgram.putExtra(Constants.INTENT_PARAM_VIEW_MODE, 1);
         intentProgram.putExtra(Constants.INTENT_PARAM_IS_TEMPLATE, isTemplate);

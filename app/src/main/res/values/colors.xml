@@ -20,6 +20,12 @@
     <color name="colorButtonRed">#cf885e</color>
     <color name="colorButtonBlue">#5eafcf</color>
 
+    <color name="colorTabMain">#cf885e</color>
+    <color name="colorTabExercises">#900fcf</color>
+    <color name="colorTabPrograms">#0090cf</color>
+    <color name="colorUserPrograms">#90af0f</color>
+
+
     <color name="colorExerciseListBackgroundDef">#fafafafa</color>
     <color name="colorExerciseListBackground1">#cf885e</color>
     <color name="colorExerciseListBackground2">#5e999f</color>
@@ -28,6 +34,7 @@
     <color name="colorExerciseListBackground5">#00afcf</color>
     <color name="colorExerciseListBackground6">#9eafc0</color>
     <color name="colorExerciseListBackground7">#90af0f</color>
+    <color name="tabsScrollColor">#8a140e</color>
 
     <color name="caldroid_white">#FFFFFF</color>
     <color name="caldroid_black">#000000</color>

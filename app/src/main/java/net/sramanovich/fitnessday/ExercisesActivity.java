@@ -2,19 +2,23 @@ package net.sramanovich.fitnessday;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.database.Cursor;
 import android.os.Bundle;
 //import android.support.design.widget.FloatingActionButton;
 //import android.support.v7.app.ActionBarActivity;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 //import android.view.View;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.CursorAdapter;
@@ -26,7 +30,7 @@ import net.sramanovich.fitnessday.db.ExercisesTable;
 import net.sramanovich.fitnessday.utils.RecyclerItemClickListener;
 //import android.widget.Toast;
 
-public class ExercisesActivity extends AppCompatActivity {
+public class ExercisesActivity extends Fragment {
 
     private CursorAdapter cursorAdapter;
     private Cursor cursor;
@@ -34,22 +38,22 @@ public class ExercisesActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private View parent_view;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.exercises_list);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        parent_view =inflater.inflate(R.layout.exercises_list,container,false);
 
         ExercisesTable.resetUsedFlag();
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerViewBodyParts);
-        mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        mRecyclerView = (RecyclerView) parent_view.findViewById(R.id.recyclerViewBodyParts);
+        mLayoutManager = new LinearLayoutManager(parent_view.getContext(), LinearLayoutManager.HORIZONTAL, false);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new BodyPartRecycleViewAdapter(this);
+        mAdapter = new BodyPartRecycleViewAdapter(parent_view.getContext());
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.addOnItemTouchListener(
-                new RecyclerItemClickListener(this, mRecyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
+                new RecyclerItemClickListener(parent_view.getContext(), mRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override public void onItemClick(View view, int position) {
                         Cursor cursor = DBEngine.getExercisesCursor(position);
                         cursorAdapter.swapCursor(cursor);
@@ -60,24 +64,35 @@ public class ExercisesActivity extends AppCompatActivity {
                 })
         );
 
-        ListView lvData = (ListView)findViewById(R.id.listExercises);
+        ListView lvData = (ListView)parent_view.findViewById(R.id.listExercises);
 
         Cursor cursor = DBEngine.getExercisesCursor();
-        String[] from = new String[]{ExercisesTable.COL_NAME, ExercisesTable.COL_TYPE};
-        int[] to = new int[]{R.id.textViewExerciseListItemName, R.id.imgViewExerciseListItemIcon};
-        cursorAdapter = ExercisesTable.getExercisesCursorAdapter( this, R.layout.exercises_list_item, cursor, from, to, 0);
+        String[] from = new String[]{ExercisesTable.COL_NAME, ExercisesTable.COL_NOTE, ExercisesTable.COL_TYPE};
+        int[] to = new int[]{R.id.textViewExerciseListItemName, R.id.textViewExerciseListItemDescription, R.id.imgViewExerciseListItemIcon};
+        cursorAdapter = ExercisesTable.getExercisesCursorAdapter( parent_view.getContext(), R.layout.exercises_list_item, cursor, from, to, 0);
         if( cursorAdapter!= null ) {
             lvData.setAdapter(cursorAdapter);
         }
 
-        initToolbar();
+        //initToolbar();
 
         /*FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.fab);
         if( fab != null ) {
             fab.hide();
         }*/
+
+        return parent_view;
     }
 
+    @Override
+    public void onResume() {
+        cursor = DBEngine.getExercisesCursor();
+        cursorAdapter.swapCursor(cursor);
+        super.onResume();
+    }
+
+
+    /*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.exercises_menu, menu);
@@ -99,7 +114,7 @@ public class ExercisesActivity extends AppCompatActivity {
         //toolbar.setLogo(R.drawable.ic_launcher);
         setSupportActionBar(toolbar);
 
-        // add back arrow to toolbar
+        // don't add back arrow to toolbar
         if (getSupportActionBar() != null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
             getSupportActionBar().setDisplayShowHomeEnabled(false);
@@ -126,8 +141,10 @@ public class ExercisesActivity extends AppCompatActivity {
         startActivityForResult(intent, 1);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    }*/
+
+    /*@Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(data!=null) {
             long db_id = data.getLongExtra(Constants.INTENT_PARAM_ID, 0);
             String name = data.getStringExtra(Constants.INTENT_PARAM_NAME);
@@ -142,10 +159,10 @@ public class ExercisesActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
-        if(cursor != null) {
+        if (cursor != null) {
             cursor.close();
         }
-    }
+    }*/
 }

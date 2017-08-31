@@ -11,11 +11,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import net.sramanovich.fitnessday.adapters.TrainingProgramListAdapter;
@@ -38,7 +40,8 @@ public class TrainingProgramActivity extends AppCompatActivity{
 
     private TrainingProgramTable trainingProgram;
 
-    private DragListView lvData;
+    //private DragListView lvData;
+    private ListView lvData;
 
     private long db_id=0;
 
@@ -131,6 +134,7 @@ public class TrainingProgramActivity extends AppCompatActivity{
                 });
             }
 
+            adapter.sortList();
             lvData.setAdapter(adapter);
 
         } catch(SQLiteException e) {
@@ -191,6 +195,12 @@ public class TrainingProgramActivity extends AppCompatActivity{
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.training_program_menu, menu);
+        return true;
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         cursor.close();
@@ -214,6 +224,12 @@ public class TrainingProgramActivity extends AppCompatActivity{
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.menu_done: {
+                        finish();
+                        break;
+                    }
+                }
                 return false;
             }
         });
@@ -236,6 +252,7 @@ public class TrainingProgramActivity extends AppCompatActivity{
             //trainingProgram.setSplitFilter(cursor, cursor.getPosition(), split_nr);
             adapter = trainingProgram.getTrainingProgramAdapter(context);
             adapter.setSplitFilter(split_nr);
+            adapter.sortList();
             lvData.setAdapter(adapter);
         }
     }

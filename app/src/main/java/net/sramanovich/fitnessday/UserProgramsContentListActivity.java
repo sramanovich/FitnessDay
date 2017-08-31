@@ -5,12 +5,16 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.ContextMenu;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.CursorAdapter;
@@ -27,12 +31,14 @@ import net.sramanovich.fitnessday.utils.ProgramData;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 
-public class UserProgramsContentListActivity extends AppCompatActivity {
+public class UserProgramsContentListActivity extends Fragment {
 
     final int MENU_ITEM_DELETE_PROGRAM=1;
 
@@ -56,21 +62,23 @@ public class UserProgramsContentListActivity extends AppCompatActivity {
 
     private UserProgramsDayAdapter programDayAdapter;
 
-    private String selProgramName;
+    private String selProgramName="";
+
+    private int selProgramPosition;
 
     private Toolbar toolbar;
 
-    private CaldroidFragment caldroidFragment;
+    //private CaldroidFragment caldroidFragment;
 
     private Calendar calendar;
 
     private Date curDate;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    private View parent_view;
 
-        setContentView(R.layout.user_programs_content);
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        parent_view = inflater.inflate(R.layout.user_programs_content,container,false);
 
         //initToolbar();
 
@@ -81,9 +89,9 @@ public class UserProgramsContentListActivity extends AppCompatActivity {
             String[] from = new String[]{TrainingProgramTable.COL_NAME};
             int[] to = new int[]{R.id.textViewProgramName};
 
-            cursorAdapter1 = mTable.getProgramsContentListAdapter(this, R.layout.user_programs_content_item1, cursor1, from, to, 0);
+            cursorAdapter1 = mTable.getProgramsContentListAdapter(parent_view.getContext(), R.layout.user_programs_content_item1, cursor1, from, to, 0);
 
-            ListView lvPrograms = (ListView) findViewById(R.id.listViewPrograms);
+            ListView lvPrograms = (ListView) parent_view.findViewById(R.id.listViewPrograms);
             lvPrograms.setAdapter(cursorAdapter1);
             lvPrograms.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
 
@@ -102,13 +110,11 @@ public class UserProgramsContentListActivity extends AppCompatActivity {
                 }
             });
 
-            onSelectProgram(0);
-
             cursor2 = DBEngine.getTrainingProgramCursor(Constants.TT_USER_PROGRAM, selProgramName);
             updateCalendarData(cursor2);
 
-            lvDayPrograms = (ListView) findViewById(R.id.listViewDayUserPrograms);
-            programDayAdapter = getDayProgramsAdapter(curDate);
+            lvDayPrograms = (ListView) parent_view.findViewById(R.id.listViewDayUserPrograms);
+            programDayAdapter = getDayProgramsAdapter(new Date(0)/*curDate*/);
             lvDayPrograms.setAdapter(programDayAdapter);
             lvDayPrograms.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
@@ -121,10 +127,14 @@ public class UserProgramsContentListActivity extends AppCompatActivity {
                 }
             });
 
+            onSelectProgram(0);
+
         } catch(SQLiteException e) {
-            Toast toast= Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT);
+            Toast toast= Toast.makeText(parent_view.getContext(), e.getMessage(), Toast.LENGTH_SHORT);
             toast.show();
         }
+
+        return parent_view;
     }
 
     @Override
@@ -174,41 +184,21 @@ public class UserProgramsContentListActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         cursor1 = DBEngine.getTrainingProgramCursor(Constants.TT_PROGRAM_TEMPLATE);
         cursorAdapter1.swapCursor(cursor1);
 
-        ListView lvPrograms = (ListView) findViewById(R.id.listViewPrograms);
-        lvPrograms.setSelection(0);
+        ListView lvPrograms = (ListView) parent_view.findViewById(R.id.listViewPrograms);
+        lvPrograms.setSelection(selProgramPosition);
+        onSelectProgram(selProgramPosition);
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
         cursor1.close();
         cursor2.close();
-    }
-
-    private void initToolbar() {
-        toolbar = (Toolbar)findViewById(R.id.toolbar);
-        toolbar.setTitle(R.string.app_name);
-        toolbar.setSubtitle(R.string.training_programs);
-        //toolbar.setLogo(R.drawable.ic_launcher);
-        setSupportActionBar(toolbar);
-
-        // add back arrow to toolbar
-        if (getSupportActionBar() != null){
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-        }
-
-        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                return false;
-            }
-        });
     }
 
     private void onSelectProgram(int position) {
@@ -216,16 +206,21 @@ public class UserProgramsContentListActivity extends AppCompatActivity {
         if (cursor1.moveToPosition(position)) {
             selProgramName = cursor1.getString(cursor1.getColumnIndex(TrainingProgramTable.COL_NAME));
             mainProgramID = cursor1.getLong(cursor1.getColumnIndex(TrainingProgramTable.COL_ID));
+            selProgramPosition = position;
         } else {
             selProgramName = "";
+            selProgramPosition = 0;
         }
 
-        cursor2 = DBEngine.getTrainingProgramCursor(Constants.TT_USER_PROGRAM, selProgramName);
-        updateCalendarData(cursor2);
+        //cursor2 = DBEngine.getTrainingProgramCursor(Constants.TT_USER_PROGRAM, selProgramName);
+        //updateCalendarData(cursor2);
+
+        programDayAdapter = getDayProgramsAdapter(new Date(0));
+        lvDayPrograms.setAdapter(programDayAdapter);
     }
 
     private void onStartProgram(long id) {
-        Intent intentNewProgram = new Intent(this, TrainingProgramActivity.class);
+        Intent intentNewProgram = new Intent(parent_view.getContext(), TrainingProgramActivity.class);
         intentNewProgram.putExtra(Constants.INTENT_PARAM_ID, (int)id);
         intentNewProgram.putExtra(Constants.INTENT_PARAM_IS_TEMPLATE, Constants.TT_PROGRAM_TEMPLATE/*Constants.TT_USER_PROGRAM*/);
         startActivity(intentNewProgram);
@@ -236,14 +231,14 @@ public class UserProgramsContentListActivity extends AppCompatActivity {
             return;
         }
 
-        Intent intentProgram = new Intent(this, TrainingProgramActivity.class);
+        Intent intentProgram = new Intent(parent_view.getContext(), TrainingProgramActivity.class);
         intentProgram.putExtra(Constants.INTENT_PARAM_ID, (int)id);
         intentProgram.putExtra(Constants.INTENT_PARAM_IS_TEMPLATE, Constants.TT_USER_PROGRAM);
         startActivity(intentProgram);
     }
 
     private void onViewProgram(long id) {
-        Intent intentProgram = new Intent(this, TrainingProgramActivity.class);
+        Intent intentProgram = new Intent(parent_view.getContext(), TrainingProgramActivity.class);
         intentProgram.putExtra(Constants.INTENT_PARAM_ID, (int)id);
         intentProgram.putExtra(Constants.INTENT_PARAM_VIEW_MODE, 1);
         intentProgram.putExtra(Constants.INTENT_PARAM_IS_TEMPLATE, Constants.TT_USER_PROGRAM);
@@ -251,7 +246,7 @@ public class UserProgramsContentListActivity extends AppCompatActivity {
     }
 
     private void updateCalendarData(Cursor cursor) {
-        caldroidFragment = new CaldroidFragment();
+        /*caldroidFragment = new CaldroidFragment();
         Bundle args = new Bundle();
         calendar = Calendar.getInstance();
 
@@ -273,7 +268,7 @@ public class UserProgramsContentListActivity extends AppCompatActivity {
         t.replace(R.id.calendar, caldroidFragment);
         t.commit();
 
-        curDate = calendar.getTime();
+        curDate = calendar.getTime();*/
     }
 
     private long getProgramID(Date date) {
@@ -298,7 +293,7 @@ public class UserProgramsContentListActivity extends AppCompatActivity {
             int db_time = cursor.getInt(cursor.getColumnIndex(TrainingProgramTable.COL_DATE));
             long time = (long) db_time * 1000;
             Date dateDB = new Date(time);
-            if (TrainingProgramTable.compareNormalizedDates(date, dateDB)==true) {
+            if ( date.getTime() == 0 || TrainingProgramTable.compareNormalizedDates(date, dateDB)==true) {
                 String name = cursor.getString(cursor.getColumnIndex(TrainingProgramTable.COL_NAME));
                 String note = cursor.getString(cursor.getColumnIndex(TrainingProgramTable.COL_NOTE));
                 ProgramData data = new ProgramData(name, new Date(time), note);
@@ -306,7 +301,21 @@ public class UserProgramsContentListActivity extends AppCompatActivity {
             }
         }
 
-        UserProgramsDayAdapter adapter = new UserProgramsDayAdapter(this, objects);
+        Collections.sort(objects, new Comparator<ProgramData>() {
+            @Override
+            public int compare(ProgramData lhs, ProgramData rhs) {
+                if (lhs.getmDate().getTime() > rhs.getmDate().getTime()) {
+                    return -1;
+                } else {
+                    if (lhs.getmDate().getTime() < rhs.getmDate().getTime()) {
+                        return 1;
+                    }
+                }
+
+                return 0;
+            }
+        });
+        UserProgramsDayAdapter adapter = new UserProgramsDayAdapter(parent_view.getContext(), objects);
         return adapter;
     }
 

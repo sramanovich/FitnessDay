@@ -206,11 +206,14 @@ class ExercisesCursorAdapter extends SimpleCursorAdapter {
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         String name = cursor.getString(cursor.getColumnIndex(ExercisesTable.COL_NAME));
+        String note = cursor.getString(cursor.getColumnIndex(ExercisesTable.COL_NOTE));
         int typeId = cursor.getInt(cursor.getColumnIndex(ExercisesTable.COL_TYPE));
         ExercisesTable.ExriciseType type = ExercisesTable.ExriciseType.fromId(typeId);
 
         TextView tvName = (TextView) view.findViewById(R.id.textViewExerciseListItemName);
         tvName.setText(name);
+        TextView tvNote = (TextView) view.findViewById(R.id.textViewExerciseListItemDescription);
+        tvNote.setText(note);
 
         ImageView imgViewType = (ImageView) view.findViewById(R.id.imgViewExerciseListItemIcon);
 

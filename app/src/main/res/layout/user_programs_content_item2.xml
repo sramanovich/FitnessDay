@@ -22,7 +22,7 @@
             android:layout_marginRight="5dp"
             android:lines="1"/>
 
-        <TextView
+        <!--<TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
@@ -32,7 +32,7 @@
             android:layout_gravity="left"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:lines="2"/>
+            android:lines="2"/>-->
 
     </LinearLayout>
 </LinearLayout>

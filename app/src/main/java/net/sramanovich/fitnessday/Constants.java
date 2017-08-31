@@ -24,4 +24,9 @@ public class Constants {
     public static final int TT_USER_PROGRAM_TEMPLATE = 0;
     public static final int TT_PROGRAM_TEMPLATE = 1;
     public static final int TT_USER_PROGRAM = 2;
+
+    public static final int TAB_MAIN = 0;
+    public static final int TAB_EXERCISES = 1;
+    public static final int TAB_PROGRAMS = 2;
+    public static final int TAB_USER_PROGRAMS = 3;
 }

@@ -11,16 +11,16 @@
         android:layout_height="match_parent"
         android:id="@+id/listViewPrograms"
         android:choiceMode="singleChoice"
-        android:layout_weight="35"
+        android:layout_weight="50"
         android:background="@drawable/list_selector"/>
 
-    <LinearLayout
+    <!--<LinearLayout
         android:id="@+id/calendar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_weight="22">
-    </LinearLayout>
+    </LinearLayout>-->
 
     <ListView
         android:layout_width="match_parent"
@@ -28,5 +28,5 @@
         android:id="@+id/listViewDayUserPrograms"
         android:choiceMode="singleChoice"
         android:background="@color/colorListBackground"
-        android:layout_weight="45"/>
+        android:layout_weight="50"/>
 </LinearLayout>

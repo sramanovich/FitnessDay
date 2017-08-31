@@ -10,6 +10,9 @@ import android.widget.TextView;
 import net.sramanovich.fitnessday.R;
 import net.sramanovich.fitnessday.utils.ProgramData;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class UserProgramsDayAdapter extends ArrayAdapter<ProgramData> {
@@ -53,12 +56,16 @@ public class UserProgramsDayAdapter extends ArrayAdapter<ProgramData> {
 
         TextView tvName = (TextView) view.findViewById(R.id.textDayProgramName);
         if(tvName!=null) {
-            tvName.setText(data.getmName());
+            //tvName.setText(data.getmName());
+            Date date = data.getmDate();
+            DateFormat df = new SimpleDateFormat("yyyy/MM/dd    HH:mm:ss");
+            String strDate = df.format(date);
+            tvName.setText(strDate);
         }
-        TextView tvNote = (TextView) view.findViewById(R.id.textDayProgramNote);
+        /*TextView tvNote = (TextView) view.findViewById(R.id.textDayProgramNote);
         if(tvNote!=null) {
             tvNote.setText(data.getmNote());
-        }
+        }*/
 
         return view;
     }
